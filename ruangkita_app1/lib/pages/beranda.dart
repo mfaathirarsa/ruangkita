@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/konten.dart';
 import '../models/dailyquiz.dart';
 
+// Loading Screen Widget
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({super.key});
 
@@ -19,21 +20,17 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF2280BF),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/logo/RuangKitaLogo.png', // Replace with your logo's path
-              width: 150,
-              height: 150,
-            ),
-          ],
+        child: Image.asset(
+          'assets/logo/RuangKitaLogo.png', // Replace with your logo's path
+          width: 150,
+          height: 150,
         ),
       ),
     );
   }
 }
 
+// Dashboard Widget
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
@@ -42,7 +39,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  int _currentIndex = 0; // Variable to track the selected tab index
+  int _currentIndex = 0; // Track the selected tab index
   bool _hasNewNotification = true; // Simulate a new notification for "Aktivitas"
 
   final List<Map<String, String>> contentData = [
@@ -71,15 +68,15 @@ class _DashboardState extends State<Dashboard> {
   );
 
   Future<void> _refreshContent() async {
-    await Future.delayed(const Duration(seconds: 2));
-    // Simulate refreshing content
+    await Future.delayed(const Duration(seconds: 2)); // Simulate refreshing content
   }
 
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
+
+      // Clear notification when "Aktivitas" is clicked
       if (index == 2) {
-        // Clear notification when "Aktivitas" is clicked
         _hasNewNotification = false;
       }
     });
@@ -104,7 +101,7 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: teksAtas(),
+                        child: _buildHeaderText(),
                       ),
                       const SizedBox(height: 16),
                       listKonten(),
@@ -114,73 +111,67 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
             ),
-            searchBar(),
+            _buildSearchBar(),
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _currentIndex,
-        selectedItemColor: const Color(0xFF63B0E3), // Lighter blue color for active items
-        unselectedItemColor: Colors.grey,
-        showUnselectedLabels: true,
-        onTap: _onTabTapped,
-        items: [
-          _buildBottomNavigationBarItem(
-            index: 0,
-            label: 'Beranda',
-            iconPath: 'assets/icons/iconBeranda.png',
-          ),
-          _buildBottomNavigationBarItem(
-            index: 1,
-            label: 'Konten',
-            iconPath: 'assets/icons/iconKonten.png',
-          ),
-          _buildBottomNavigationBarItem(
-            index: 2,
-            label: 'Aktivitas',
-            iconPath: 'assets/icons/iconAktivitas.png',
-            hasNotification: _hasNewNotification,
-          ),
-          _buildBottomNavigationBarItem(
-            index: 3,
-            label: 'Konsultasi',
-            iconPath: 'assets/icons/iconKonsultasi.png',
-          ),
-        ],
-      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
     );
   }
 
-  BottomNavigationBarItem _buildBottomNavigationBarItem({
-    required int index,
-    required String label,
-    required String iconPath,
+  // Build the BottomNavigationBar
+  BottomNavigationBar _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      currentIndex: _currentIndex,
+      selectedItemColor: const Color(0xFF63B0E3), // Lighter blue for active items
+      unselectedItemColor: Colors.grey,
+      showUnselectedLabels: true,
+      onTap: _onTabTapped,
+      items: [
+        _buildBottomNavigationBarItem(0, 'Beranda', 'assets/images/beranda.png'),
+        _buildBottomNavigationBarItem(1, 'Konten', 'assets/images/konten.png'),
+        _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/images/aktivitas.png', hasNotification: _hasNewNotification),
+        _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/images/konsultasi.png'),
+      ],
+    );
+  }
+
+  // Build a single BottomNavigationBar item
+  BottomNavigationBarItem _buildBottomNavigationBarItem(
+    int index,
+    String label,
+    String iconPath, {
     bool hasNotification = false,
   }) {
     bool isActive = _currentIndex == index;
 
     return BottomNavigationBarItem(
       icon: Stack(
+        clipBehavior: Clip.none, // Allow overflow for custom elements
         children: [
+          // Main icon
           Image.asset(
             iconPath,
-            color: isActive ? const Color(0xFF63B0E3) : Colors.grey, // Lighter blue when active
+            color: isActive ? const Color(0xFF63B0E3) : Colors.grey,
             height: 24,
           ),
+          // Active state bar
           if (isActive)
             Positioned(
-              top: -10, // Position the blue bar above the icon
-              left: 0,
-              right: 0,
+              top: -12,
+              left: -5,
+              right: -5, // Adjust position of the active bar
               child: Image.asset(
-                'assets/images/aktif.png', // Blue bar image for active state
-                height: 10, // Height of the bar
+                'assets/images/aktif.png',
+                height: 10,
               ),
             ),
+          // Notification indicator
           if (hasNotification)
-            Transform.translate(
-              offset: const Offset(20, -5), // Move it 5 units higher
+            Positioned(
+              top: -5,
+              right: -5,
               child: Image.asset(
                 'assets/images/elips.png',
                 height: 5,
@@ -190,55 +181,61 @@ class _DashboardState extends State<Dashboard> {
         ],
       ),
       label: label,
-      backgroundColor: Colors.white,
     );
   }
 
-  Column teksAtas() {
+  // Build header text
+  Column _buildHeaderText() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Hai, Daffa Pramudya!',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.blue[900],
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue[900]),
         ),
         const SizedBox(height: 8),
         Text(
           'Mau belajar apa hari ini?',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey[600],
-          ),
+          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
         ),
         const SizedBox(height: 20),
         Text(
           'Ada yang baru nih buat kamu!',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Colors.blue[900],
-          ),
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.blue[900]),
         ),
       ],
     );
   }
 
-  SizedBox listKonten() {
+  // Build the content list
+  SizedBox _buildContentList() {
     return SizedBox(
-      height: 210, // Define height for horizontal content list
+      height: 210,
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
-        children: buildContentCards(contentData),
+        children: _buildContentCards(),
       ),
     );
   }
 
-  Positioned searchBar() {
+  // Build content cards
+  List<Widget> _buildContentCards() {
+    return contentData.map((item) {
+      return Padding(
+        padding: const EdgeInsets.only(right: 12.0),
+        child: ContentCard(
+          title: item["title"]!,
+          type: item["type"]!,
+          date: item["date"]!,
+          imagePath: item["imagePath"]!,
+        ),
+      );
+    }).toList();
+  }
+
+  // Build the search bar
+  Positioned _buildSearchBar() {
     return Positioned(
       top: 0,
       left: 0,
@@ -253,11 +250,7 @@ class _DashboardState extends State<Dashboard> {
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
                   hintText: 'Cari artikel, video, kuis, atau lainnya...',
-                  hintStyle: TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                    color: Colors.grey[600],
-                  ),
+                  hintStyle: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
                     borderSide: BorderSide.none,
@@ -275,19 +268,5 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
-  }
-
-  List<Widget> buildContentCards(List<Map<String, String>> data) {
-    return data.map((item) {
-      return Padding(
-        padding: const EdgeInsets.only(right: 12.0),
-        child: ContentCard(
-          title: item["title"]!,
-          type: item["type"]!,
-          date: item["date"]!,
-          imagePath: item["imagePath"]!,
-        ),
-      );
-    }).toList();
   }
 }
