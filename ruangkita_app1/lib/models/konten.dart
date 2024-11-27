@@ -51,11 +51,11 @@ class ContentCard extends StatelessWidget {
                 if (type == "Video")
                   Container(
                     height: 120,
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.black.withOpacity(0.3),
                     child: const Center(
                       child: Icon(
                         Icons.play_circle_fill,
-                        color: Colors.white,
+                        color: Colors.black,
                         size: 40,
                       ),
                     ),
