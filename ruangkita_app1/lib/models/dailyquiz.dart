@@ -53,22 +53,13 @@ class _DailyQuizWidgetState extends State<DailyQuizWidget> {
         children: [
           // Tambahkan background biru pada teks "Daily Quiz:"
           Container(
-            height: 35,
-            width: double.infinity, // width yang diatur ke double.infinity
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(12.0),
-              ),
-            ),
-            alignment: Alignment
-                .topCenter, // alignment untuk memindahkan background text
+            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 4.0),
             child: const Text(
               "Daily Quiz:",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue, // Teks putih
+                color: Color(0xFF2280BF), // Ubah warna teks menjadi hitam
               ),
             ),
           ),
