@@ -109,7 +109,7 @@ class _DashboardState extends State<Dashboard> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.blue[900],
+        selectedItemColor: const Color(0xFF63B0E3), // Lighter blue color for active items
         unselectedItemColor: Colors.grey,
         showUnselectedLabels: true,
         onTap: _onTabTapped,
@@ -153,7 +153,7 @@ class _DashboardState extends State<Dashboard> {
         children: [
           Image.asset(
             iconPath,
-            color: isActive ? Colors.blue[900] : Colors.grey,
+            color: isActive ? const Color(0xFF63B0E3) : Colors.grey, // Lighter blue when active
             height: 24,
           ),
           if (isActive)
