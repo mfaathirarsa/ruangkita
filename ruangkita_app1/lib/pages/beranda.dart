@@ -20,11 +20,9 @@ class LoadingScreen extends StatelessWidget {
           children: [
             Image.asset(
               'assets/logo/RuangKitaLogo.png', // Gantilah dengan path logo yang sesuai
-              width: 100,
-              height: 100,
+              width: 150,
+              height: 150,
             ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(), // Menampilkan indikator loading
           ],
         ),
       ),
@@ -98,7 +96,7 @@ class Dashboard extends StatelessWidget {
                     SizedBox(height: 16),
                     // List kartu konten
                     Container(
-                      height: 220, // Menentukan tinggi untuk konten horizontal
+                      height: 210, // Menentukan tinggi untuk konten horizontal
                       child: ListView(
                         padding: EdgeInsets.symmetric(horizontal: 16.0),
                         scrollDirection: Axis.horizontal,
