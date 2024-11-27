@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'pages/beranda.dart';
 
 void main() {
-  runApp(const MyApp()); // Tambahkan 'const' di sini
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key}); // Tambahkan 'const' pada deklarasi konstruktor
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Gotham',
       ),
       debugShowCheckedModeBanner: false,
-      home: const LoadingScreen(), // Tambahkan 'const' di sini
+      home: const LoadingScreen(),
     );
   }
 }
