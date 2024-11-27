@@ -14,6 +14,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_native_splash: ^2.2.8
+
 
 dev_dependencies:
   flutter_test:
@@ -29,4 +31,11 @@ flutter:
 
   assets:
     # Add assets from the images directory to the application.
-    - assets/images/
+    - assets/logo/
+
+flutter_native_splash:
+  color: "#2280BF"  # Ganti dengan kode warna yang kamu inginkan
+  image: assets/logo/RuangKitaLogo.png  # Gantilah dengan path logo kamu
+  android: true
+  ios: true
+  web: false  # jika kamu tidak membutuhkan splash screen untuk web, bisa diatur false
