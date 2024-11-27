@@ -107,7 +107,7 @@ class _DashboardState extends State<Dashboard> {
                         child: teksAtas(),
                       ),
                       const SizedBox(height: 16),
-                      ListKonten(),
+                      listKonten(),
                       DailyQuizWidget(quiz: quiz),
                     ],
                   ),
