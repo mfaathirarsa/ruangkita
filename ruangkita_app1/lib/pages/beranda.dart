@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/konten.dart';
 import '../models/dailyquiz.dart';
+import '../models/recent_question.dart'; // Import untuk widget pertanyaan terbaru
 
 // Loading Screen Widget
 class LoadingScreen extends StatelessWidget {
@@ -21,7 +22,7 @@ class LoadingScreen extends StatelessWidget {
       backgroundColor: const Color(0xFF2280BF),
       body: Center(
         child: Image.asset(
-          'assets/logo/RuangKitaLogo.png', // Replace with your logo's path
+          'assets/logo/RuangKitaLogo.png',
           width: 150,
           height: 150,
         ),
@@ -39,8 +40,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  int _currentIndex = 0; // Track the selected tab index
-  bool _hasNewNotification = true; // Simulate a new notification for "Aktivitas"
+  int _currentIndex = 0; // Index untuk tab saat ini
+  bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
 
   final List<Map<String, String>> contentData = [
     {
@@ -67,28 +68,33 @@ class _DashboardState extends State<Dashboard> {
     ],
   );
 
-  final List<Map<String, String>> recentQuestions = [
+  final List<Map<String, dynamic>> recentQuestions = [
     {
       "username": "Dudung",
       "question": "Bagaimana cara pengobatan yang baik dan benar untuk Ibu kita?",
+      "answer": "Kamu seharusnya begini lalu begitu, kamu harus minum ini 3x sehari.",
+      "helpfulCount": 4,
+      "replyCount": 2,
     },
     {
       "username": "Dr. Ratio",
-      "question": "Jika seseorang begini lalu begitu, kamu harus minum ini 3x sehari.",
+      "question": "Apa efek dari makan makanan yang tidak sehat?",
+      "answer": "Hindari makanan cepat saji dan perbanyak sayur serta buah.",
+      "helpfulCount": 3,
+      "replyCount": 1,
     },
   ];
 
   Future<void> _refreshContent() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate refreshing content
+    await Future.delayed(const Duration(seconds: 2)); // Simulasi refresh konten
   }
 
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
 
-      // Clear notification when "Aktivitas" is clicked
       if (index == 2) {
-        _hasNewNotification = false;
+        _hasNewNotification = false; // Hapus notifikasi jika tab "Aktivitas" dibuka
       }
     });
   }
@@ -132,12 +138,11 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  // Build the BottomNavigationBar
   BottomNavigationBar _buildBottomNavigationBar() {
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       currentIndex: _currentIndex,
-      selectedItemColor: const Color(0xFF63B0E3), // Lighter blue for active items
+      selectedItemColor: const Color(0xFF63B0E3),
       unselectedItemColor: Colors.grey,
       showUnselectedLabels: true,
       onTap: _onTabTapped,
@@ -150,7 +155,6 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  // Build a single BottomNavigationBar item
   BottomNavigationBarItem _buildBottomNavigationBarItem(
     int index,
     String label,
@@ -163,13 +167,11 @@ class _DashboardState extends State<Dashboard> {
       icon: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Main icon
           Image.asset(
             iconPath,
             color: isActive ? const Color(0xFF63B0E3) : Colors.grey,
             height: 24,
           ),
-          // Active state bar
           if (isActive)
             Positioned(
               top: -12,
@@ -180,7 +182,6 @@ class _DashboardState extends State<Dashboard> {
                 height: 10,
               ),
             ),
-          // Notification indicator
           if (hasNotification)
             Positioned(
               top: -5,
@@ -197,7 +198,6 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  // Build header text
   Column _buildHeaderText() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -220,7 +220,6 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  // Build the content list
   SizedBox _buildContentList() {
     return SizedBox(
       height: 210,
@@ -232,7 +231,6 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  // Build content cards
   List<Widget> _buildContentCards() {
     return contentData.map((item) {
       return Padding(
@@ -247,7 +245,6 @@ class _DashboardState extends State<Dashboard> {
     }).toList();
   }
 
-  // Build the search bar
   Positioned _buildSearchBar() {
     return Positioned(
       top: 0,
@@ -280,59 +277,6 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
-    );
-  }
-}
-
-// Recent Questions Widget
-class RecentQuestionsWidget extends StatelessWidget {
-  final List<Map<String, String>> questions;
-
-  const RecentQuestionsWidget({super.key, required this.questions});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Cek pertanyaan terbaru!',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-              color: Colors.blue[900],
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: questions.length,
-          itemBuilder: (context, index) {
-            final question = questions[index];
-            return ListTile(
-              leading: CircleAvatar(
-                backgroundColor: Colors.blue[100],
-                child: Icon(Icons.person, color: Colors.blue[900]),
-              ),
-              title: Text(
-                question["username"]!,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(question["question"]!),
-              trailing: IconButton(
-                icon: const Icon(Icons.thumb_up_alt_outlined),
-                onPressed: () {
-                  // Tambahkan logika untuk "Membantu" di sini
-                },
-              ),
-            );
-          },
-        ),
-      ],
     );
   }
 }
