@@ -16,6 +16,10 @@ Saat ini, aplikasi masih dalam tahap *prototype* dan dikembangkan menggunakan Fl
 
 ### 2. **Konten**  
 - Menyediakan **video** dan **artikel** edukatif tentang kesehatan reproduksi.  
+- **PENTING**: Konten difilter berdasarkan gender pengguna.  
+  - Contoh: konten terkait kesehatan reproduksi laki-laki hanya akan ditampilkan kepada pengguna ber-gender laki-laki.  
+  - **Opsional**: Pengguna juga dapat memilih untuk memfilter konten secara manual.  
+  - Fitur filter ini direncanakan akan diimplementasikan menggunakan sistem **hashtag**.  
 - Video di-embed dari channel YouTube resmi **RuangKita** untuk menjaga efisiensi server.  
 
 ### 3. **Konsultasi dan Forum**  
@@ -32,6 +36,7 @@ Saat ini, aplikasi masih dalam tahap *prototype* dan dikembangkan menggunakan Fl
 - Hosting video langsung di server internal (saat ini video hanya di-embed dari YouTube).  
 - Menambahkan sistem reward lebih banyak.  
 - Pengembangan fitur tambahan berdasarkan umpan balik pengguna.  
+- Implementasi sistem filter konten berbasis **hashtag**.  
 
 ## 💡 **Catatan Penting**  
 - **Fitur Free**: Akses penuh ke semua konten video, artikel, tips & tricks, dan forum.  
