@@ -22,12 +22,10 @@ class LoadingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo/RuangKitaLogo.png',
-              width: 100,
-              height: 100,
+              'assets/logo/RuangKitaLogo.png', // Gantilah dengan path logo yang sesuai
+              width: 150,
+              height: 150,
             ),
-            const SizedBox(height: 20),
-            const CircularProgressIndicator(),
           ],
         ),
       ),
@@ -100,8 +98,9 @@ class Dashboard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    // List kartu konten
                     SizedBox(
-                      height: 220,
+                      height: 210, // Menentukan tinggi untuk konten horizontal
                       child: ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         scrollDirection: Axis.horizontal,
