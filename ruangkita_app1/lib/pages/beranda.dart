@@ -58,14 +58,25 @@ class _DashboardState extends State<Dashboard> {
   ];
 
   final DailyQuiz quiz = DailyQuiz(
-    question: "Apa nama itu yang ada disana?",
+    question: "Apa yang perlu dilakukan untuk menjaga kesehatan tubuh di masa remaja?",
     options: [
-      AnswerOption(text: "Tes blablablabla", isCorrect: false),
-      AnswerOption(text: "Tes blablablabla", isCorrect: false),
-      AnswerOption(text: "Tes blablablabla", isCorrect: true),
-      AnswerOption(text: "Tes blablablabla", isCorrect: false),
+      AnswerOption(text: "Makan makanan yang sehat", isCorrect: true),
+      AnswerOption(text: "Sering begadang", isCorrect: false),
+      AnswerOption(text: "Menghindari olahraga", isCorrect: false),
+      AnswerOption(text: "Merokok", isCorrect: false),
     ],
   );
+
+  final List<Map<String, String>> recentQuestions = [
+    {
+      "username": "Dudung",
+      "question": "Bagaimana cara pengobatan yang baik dan benar untuk Ibu kita?",
+    },
+    {
+      "username": "Dr. Ratio",
+      "question": "Jika seseorang begini lalu begitu, kamu harus minum ini 3x sehari.",
+    },
+  ];
 
   Future<void> _refreshContent() async {
     await Future.delayed(const Duration(seconds: 2)); // Simulate refreshing content
@@ -106,6 +117,8 @@ class _DashboardState extends State<Dashboard> {
                       const SizedBox(height: 16),
                       _buildContentList(),
                       DailyQuizWidget(quiz: quiz),
+                      const SizedBox(height: 20),
+                      RecentQuestionsWidget(questions: recentQuestions),
                     ],
                   ),
                 ),
@@ -121,22 +134,21 @@ class _DashboardState extends State<Dashboard> {
 
   // Build the BottomNavigationBar
   BottomNavigationBar _buildBottomNavigationBar() {
-  return BottomNavigationBar(
-    type: BottomNavigationBarType.fixed,
-    currentIndex: _currentIndex,
-    selectedItemColor: const Color(0xFF63B0E3), // Lighter blue for active items
-    unselectedItemColor: Colors.grey,
-    showUnselectedLabels: true,
-    onTap: _onTabTapped,
-    items: [
-      _buildBottomNavigationBarItem(0, 'Beranda', 'assets/icons/iconBeranda.png'),
-      _buildBottomNavigationBarItem(1, 'Konten', 'assets/icons/iconKonten.png'),
-      _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/icons/iconAktivitas.png', hasNotification: _hasNewNotification),
-      _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/icons/iconKonsultasi.png'),
-    ],
-  );
-}
-
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      currentIndex: _currentIndex,
+      selectedItemColor: const Color(0xFF63B0E3), // Lighter blue for active items
+      unselectedItemColor: Colors.grey,
+      showUnselectedLabels: true,
+      onTap: _onTabTapped,
+      items: [
+        _buildBottomNavigationBarItem(0, 'Beranda', 'assets/icons/iconBeranda.png'),
+        _buildBottomNavigationBarItem(1, 'Konten', 'assets/icons/iconKonten.png'),
+        _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/icons/iconAktivitas.png', hasNotification: _hasNewNotification),
+        _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/icons/iconKonsultasi.png'),
+      ],
+    );
+  }
 
   // Build a single BottomNavigationBar item
   BottomNavigationBarItem _buildBottomNavigationBarItem(
@@ -268,6 +280,59 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
+    );
+  }
+}
+
+// Recent Questions Widget
+class RecentQuestionsWidget extends StatelessWidget {
+  final List<Map<String, String>> questions;
+
+  const RecentQuestionsWidget({super.key, required this.questions});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Cek pertanyaan terbaru!',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              color: Colors.blue[900],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: questions.length,
+          itemBuilder: (context, index) {
+            final question = questions[index];
+            return ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.blue[100],
+                child: Icon(Icons.person, color: Colors.blue[900]),
+              ),
+              title: Text(
+                question["username"]!,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(question["question"]!),
+              trailing: IconButton(
+                icon: const Icon(Icons.thumb_up_alt_outlined),
+                onPressed: () {
+                  // Tambahkan logika untuk "Membantu" di sini
+                },
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
