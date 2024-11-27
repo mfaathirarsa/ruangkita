@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/konten.dart';
 import '../models/daily_quiz.dart';
-import '../models/recent_question.dart'; // Import untuk widget pertanyaan terbaru
-import '../models/menu_bawah.dart'; // Import untuk widget BottomNavigationBar
+import '../models/recent_question.dart';
+import '../models/menu_bawah.dart';
 
 // Loading Screen Widget
 class LoadingScreen extends StatelessWidget {
