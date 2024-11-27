@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/konten.dart';
 import '../models/dailyquiz.dart';
 import '../models/recent_question.dart'; // Import untuk widget pertanyaan terbaru
+import '../models/menu_bawah.dart'; // Import untuk widget BottomNavigationBar
 
 // Loading Screen Widget
 class LoadingScreen extends StatelessWidget {
@@ -36,10 +37,10 @@ class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
-  _DashboardState createState() => _DashboardState();
+  DashboardState createState() => DashboardState(); // Update the state class name here
 }
 
-class _DashboardState extends State<Dashboard> {
+class DashboardState extends State<Dashboard> { // Change _DashboardState to DashboardState
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
 
@@ -134,67 +135,11 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavigationBar(),
-    );
-  }
-
-  BottomNavigationBar _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _currentIndex,
-      selectedItemColor: const Color(0xFF63B0E3),
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      onTap: _onTabTapped,
-      items: [
-        _buildBottomNavigationBarItem(0, 'Beranda', 'assets/icons/iconBeranda.png'),
-        _buildBottomNavigationBarItem(1, 'Konten', 'assets/icons/iconKonten.png'),
-        _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/icons/iconAktivitas.png', hasNotification: _hasNewNotification),
-        _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/icons/iconKonsultasi.png'),
-      ],
-    );
-  }
-
-  BottomNavigationBarItem _buildBottomNavigationBarItem(
-    int index,
-    String label,
-    String iconPath, {
-    bool hasNotification = false,
-  }) {
-    bool isActive = _currentIndex == index;
-
-    return BottomNavigationBarItem(
-      icon: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Image.asset(
-            iconPath,
-            color: isActive ? const Color(0xFF63B0E3) : Colors.grey,
-            height: 24,
-          ),
-          if (isActive)
-            Positioned(
-              top: -12,
-              left: 0,
-              right: 0,
-              child: Image.asset(
-                'assets/icons/aktif.png',
-                height: 10,
-              ),
-            ),
-          if (hasNotification)
-            Positioned(
-              top: -5,
-              right: -5,
-              child: Image.asset(
-                'assets/icons/elips.png',
-                height: 5,
-                width: 5,
-              ),
-            ),
-        ],
+      bottomNavigationBar: MenuBawah(
+        currentIndex: _currentIndex,
+        onTabTapped: _onTabTapped,
+        hasNewNotification: _hasNewNotification,
       ),
-      label: label,
     );
   }
 
