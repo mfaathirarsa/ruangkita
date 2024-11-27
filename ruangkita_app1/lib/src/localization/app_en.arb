@@ -1,0 +1,6 @@
+{
+  "appTitle": "ruangkita_app1",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}
