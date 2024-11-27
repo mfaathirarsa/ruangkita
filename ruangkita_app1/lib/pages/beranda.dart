@@ -2,29 +2,32 @@ import 'package:flutter/material.dart';
 import '../models/konten.dart';
 
 class LoadingScreen extends StatelessWidget {
+  const LoadingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    // Simulasi loading 3 detik sebelum ke Dashboard
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Dashboard()),
-      );
+    Future.delayed(const Duration(seconds: 3), () {
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => Dashboard()),
+        );
+      }
     });
 
     return Scaffold(
-      backgroundColor: Color(0xFF2280BF), // Mengubah warna latar belakang
+      backgroundColor: const Color(0xFF2280BF),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo/RuangKitaLogo.png', // Gantilah dengan path logo yang sesuai
+              'assets/logo/RuangKitaLogo.png',
               width: 100,
               height: 100,
             ),
-            SizedBox(height: 20),
-            CircularProgressIndicator(), // Menampilkan indikator loading
+            const SizedBox(height: 20),
+            const CircularProgressIndicator(),
           ],
         ),
       ),
@@ -38,26 +41,27 @@ class Dashboard extends StatelessWidget {
       "title": "Cara Menjaga Organ Reproduksi Wanita - Sehatpedia",
       "type": "Video",
       "date": "26/8/2021",
-      "imagePath": "assets/images/exKonten1.png" // Ganti sesuai path gambar
+      "imagePath": "assets/images/exKonten1.png"
     },
     {
       "title": "Pentingnya Pengetahuan Kesehatan Reproduksi Bagi Remaja",
       "type": "Artikel",
       "date": "26/8/2021",
-      "imagePath": "assets/images/exKonten2.png" // Ganti sesuai path gambar
+      "imagePath": "assets/images/exKonten2.png"
     },
   ];
+
+  Dashboard({super.key}); // Hapus 'const'
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false, // Agar konten tidak mengecil saat keyboard muncul
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Stack(
           children: [
-            // Konten utama
             Padding(
-              padding: const EdgeInsets.only(top: 80.0), // Jarak dari search bar
+              padding: const EdgeInsets.only(top: 80.0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,7 +79,7 @@ class Dashboard extends StatelessWidget {
                               color: Colors.blue[900],
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text(
                             'Mau belajar apa hari ini?',
                             style: TextStyle(
@@ -83,7 +87,7 @@ class Dashboard extends StatelessWidget {
                               color: Colors.grey[600],
                             ),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Text(
                             'Ada yang baru nih buat kamu!',
                             style: TextStyle(
@@ -95,12 +99,11 @@ class Dashboard extends StatelessWidget {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
-                    // List kartu konten
-                    Container(
-                      height: 220, // Menentukan tinggi untuk konten horizontal
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      height: 220,
                       child: ListView(
-                        padding: EdgeInsets.symmetric(horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         scrollDirection: Axis.horizontal,
                         children: buildContentCards(contentData),
                       ),
@@ -109,23 +112,21 @@ class Dashboard extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Search bar di atas
             Positioned(
               top: 0,
               left: 0,
               right: 0,
               child: Container(
                 color: Colors.white,
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     Expanded(
                       child: TextField(
                         decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search),
+                          prefixIcon: const Icon(Icons.search),
                           hintText: 'Cari artikel, video, kuis, atau lainnya...',
-                          hintStyle: TextStyle( // Hint text tanpa bold
+                          hintStyle: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 14,
                             color: Colors.grey[600],
@@ -139,8 +140,8 @@ class Dashboard extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8.0),
-                    CircleAvatar(
+                    const SizedBox(width: 8.0),
+                    const CircleAvatar(
                       child: Icon(Icons.person),
                     ),
                   ],
@@ -153,7 +154,6 @@ class Dashboard extends StatelessWidget {
     );
   }
 
-  // Metode untuk membangun daftar ContentCard
   List<Widget> buildContentCards(List<Map<String, String>> data) {
     return data.map((item) {
       return Padding(

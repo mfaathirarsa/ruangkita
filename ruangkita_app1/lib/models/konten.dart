@@ -7,7 +7,7 @@ class ContentCard extends StatelessWidget {
   final String date;
   final String imagePath;
 
-  const ContentCard({
+  const ContentCard({super.key, 
     required this.title,
     required this.type,
     required this.date,
@@ -18,7 +18,7 @@ class ContentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200,
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         right: 12.0,
         bottom: 8.0, // Beri margin bawah
       ),
@@ -29,7 +29,7 @@ class ContentCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 6.0,
-            offset: Offset(0, 3), // Shadow yang tidak terpotong
+            offset: const Offset(0, 3), // Shadow yang tidak terpotong
           ),
         ],
       ),
@@ -37,7 +37,7 @@ class ContentCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.vertical(
+            borderRadius: const BorderRadius.vertical(
               top: Radius.circular(12.0),
             ),
             child: Stack(
@@ -52,7 +52,7 @@ class ContentCard extends StatelessWidget {
                   Container(
                     height: 120,
                     color: Colors.black.withOpacity(0.4),
-                    child: Center(
+                    child: const Center(
                       child: Icon(
                         Icons.play_circle_fill,
                         color: Colors.white,
@@ -64,7 +64,7 @@ class ContentCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,19 +72,19 @@ class ContentCard extends StatelessWidget {
                   title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.black87,
                   ),
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       type,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Colors.blue,
                         fontWeight: FontWeight.w500,
