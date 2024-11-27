@@ -129,10 +129,10 @@ class _DashboardState extends State<Dashboard> {
     showUnselectedLabels: true,
     onTap: _onTabTapped,
     items: [
-      _buildBottomNavigationBarItem(0, 'Beranda', 'assets/icons/beranda.png'),
-      _buildBottomNavigationBarItem(1, 'Konten', 'assets/icons/konten.png'),
-      _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/icons/aktivitas.png', hasNotification: _hasNewNotification),
-      _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/icons/konsultasi.png'),
+      _buildBottomNavigationBarItem(0, 'Beranda', 'assets/icons/iconBeranda.png'),
+      _buildBottomNavigationBarItem(1, 'Konten', 'assets/icons/iconKonten.png'),
+      _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/icons/iconAktivitas.png', hasNotification: _hasNewNotification),
+      _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/icons/iconKonsultasi.png'),
     ],
   );
 }
