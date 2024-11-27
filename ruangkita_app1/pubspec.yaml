@@ -59,8 +59,8 @@ flutter:
         - asset: assets/fonts/Gotham-XLightItalic.otf
 
 flutter_native_splash:
-  color: "#2280BF"  # Ganti dengan kode warna yang kamu inginkan
-  image: assets/logo/RuangKitaLogo.png  # Gantilah dengan path logo kamu
+  color: "#2280BF" 
+  image: assets/logo/RuangKitaLogo.png  
   android: true
   ios: true
-  web: false  # jika kamu tidak membutuhkan splash screen untuk web, bisa diatur false
+  web: false  
