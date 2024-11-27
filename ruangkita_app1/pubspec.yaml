@@ -16,7 +16,6 @@ dependencies:
     sdk: flutter
   flutter_native_splash: ^2.2.8
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -32,6 +31,31 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/logo/
+    - assets/images/
+
+  fonts:
+    - family: Gotham
+      fonts:
+        - asset: assets/fonts/Gotham-Black.otf
+          weight: 900
+        - asset: assets/fonts/Gotham-Bold.otf
+          weight: 700
+        - asset: assets/fonts/GothamBold.ttf
+        - asset: assets/fonts/GothamBoldItalic.ttf
+        - asset: assets/fonts/GothamBook.ttf
+        - asset: assets/fonts/Gotham-BookItalic.otf
+        - asset: assets/fonts/GothamBookItalic.ttf
+        - asset: assets/fonts/Gotham-Light.otf
+        - asset: assets/fonts/GothamLight.ttf
+        - asset: assets/fonts/GothamLightItalic.ttf
+        - asset: assets/fonts/GothamMedium.ttf
+        - asset: assets/fonts/GothamMedium_1.ttf
+        - asset: assets/fonts/GothamMediumItalic.ttf
+        - asset: assets/fonts/Gotham-Thin.otf
+        - asset: assets/fonts/Gotham-ThinItalic.otf
+        - asset: assets/fonts/Gotham-UltraItalic.otf
+        - asset: assets/fonts/Gotham-XLight.otf
+        - asset: assets/fonts/Gotham-XLightItalic.otf
 
 flutter_native_splash:
   color: "#2280BF"  # Ganti dengan kode warna yang kamu inginkan
