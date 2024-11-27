@@ -163,17 +163,16 @@ class _DashboardState extends State<Dashboard> {
               right: 0,
               child: Image.asset(
                 'assets/images/aktif.png', // Blue bar image for active state
-                height: 5, // Height of the bar
+                height: 10, // Height of the bar
               ),
             ),
           if (hasNotification)
-            Positioned(
-              right: 0,
-              top: 0,
+            Transform.translate(
+              offset: const Offset(20, -5), // Move it 5 units higher
               child: Image.asset(
                 'assets/images/elips.png',
-                height: 10,
-                width: 10,
+                height: 5,
+                width: 5,
               ),
             ),
         ],
