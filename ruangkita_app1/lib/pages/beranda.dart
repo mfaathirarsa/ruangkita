@@ -77,13 +77,13 @@ class DashboardState extends State<Dashboard> { // Change _DashboardState to Das
       "helpfulCount": 4,
       "replyCount": 2,
     },
-    {
-      "username": "Dr. Ratio",
-      "question": "Apa efek dari makan makanan yang tidak sehat?",
-      "answer": "Hindari makanan cepat saji dan perbanyak sayur serta buah.",
-      "helpfulCount": 3,
-      "replyCount": 1,
-    },
+    // {
+    //   "username": "Dr. Ratio",
+    //   "question": "Apa efek dari makan makanan yang tidak sehat?",
+    //   "answer": "Hindari makanan cepat saji dan perbanyak sayur serta buah.",
+    //   "helpfulCount": 3,
+    //   "replyCount": 1,
+    // },
   ];
 
   Future<void> _refreshContent() async {
