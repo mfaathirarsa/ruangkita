@@ -72,39 +72,68 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFFEEF6FC),
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 80.0),
-              child: RefreshIndicator(
-                onRefresh: _refreshContent,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: TeksAtas(),
-                      ),
-                      const SizedBox(height: 16),
-                      ListKonten(),
-                    ],
-                  ),
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: const Color(0xFFEEF6FC),
+    resizeToAvoidBottomInset: false,
+    body: SafeArea(
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0),
+            child: RefreshIndicator(
+              onRefresh: _refreshContent,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TeksAtas(),
+                    ),
+                    const SizedBox(height: 16),
+                    ListKonten(),
+                  ],
                 ),
               ),
             ),
-            SearchBar(),
-          ],
-        ),
+          ),
+          SearchBar(),
+        ],
       ),
-    );
-  }
+    ),
+    bottomNavigationBar: BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Colors.blue[900],
+      unselectedItemColor: Colors.grey,
+      showUnselectedLabels: true,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Beranda',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.article),
+          label: 'Konten',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.bar_chart),
+          label: 'Aktivitas',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.chat_bubble),
+          label: 'Konsultasi',
+        ),
+      ],
+      onTap: (index) {
+        // Handle navigation between pages here
+        // Example: setState to switch content or navigate to a new screen
+      },
+    ),
+  );
+}
+
 
   Column TeksAtas() {
     return Column(
