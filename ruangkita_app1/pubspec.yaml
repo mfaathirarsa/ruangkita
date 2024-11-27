@@ -39,6 +39,7 @@ flutter:
     - assets/images/elips.png
     - assets/images/aktif.png
 
+    - assets/icons/
 
   fonts:
     - family: Gotham

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/konten.dart';
+import '../models/dailyquiz.dart';
 
 // Loading Screen Widget
 class LoadingScreen extends StatelessWidget {
@@ -56,6 +57,16 @@ class _DashboardState extends State<Dashboard> {
     },
   ];
 
+  final DailyQuiz quiz = DailyQuiz(
+    question: "Apa nama itu yang ada disana?",
+    options: [
+      AnswerOption(text: "Tes blablablabla", isCorrect: false),
+      AnswerOption(text: "Tes blablablabla", isCorrect: false),
+      AnswerOption(text: "Tes blablablabla", isCorrect: true),
+      AnswerOption(text: "Tes blablablabla", isCorrect: false),
+    ],
+  );
+
   Future<void> _refreshContent() async {
     await Future.delayed(const Duration(seconds: 2)); // Simulate refreshing content
   }
@@ -93,7 +104,8 @@ class _DashboardState extends State<Dashboard> {
                         child: _buildHeaderText(),
                       ),
                       const SizedBox(height: 16),
-                      _buildContentList(),
+                      listKonten(),
+                      DailyQuizWidget(quiz: quiz),
                     ],
                   ),
                 ),
