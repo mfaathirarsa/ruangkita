@@ -10,7 +10,7 @@ class LoadingScreen extends StatelessWidget {
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Dashboard()),
+          MaterialPageRoute(builder: (context) => const Dashboard()),
         );
       }
     });
@@ -22,7 +22,7 @@ class LoadingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo/RuangKitaLogo.png', // Gantilah dengan path logo yang sesuai
+              'assets/logo/RuangKitaLogo.png', // Replace with your logo's path
               width: 150,
               height: 150,
             ),
@@ -34,13 +34,16 @@ class LoadingScreen extends StatelessWidget {
 }
 
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+  const Dashboard({super.key});
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+  int _currentIndex = 0; // Variable to track the selected tab index
+  bool _hasNewNotification = true; // Simulate a new notification for "Aktivitas"
+
   final List<Map<String, String>> contentData = [
     {
       "title": "Cara Menjaga Organ Reproduksi Wanita - Sehatpedia",
@@ -57,85 +60,130 @@ class _DashboardState extends State<Dashboard> {
   ];
 
   Future<void> _refreshContent() async {
-    // Simulasi delay untuk proses refresh
     await Future.delayed(const Duration(seconds: 2));
+    // Simulate refreshing content
+  }
 
-    // Setelah data baru dimuat, lakukan setState untuk memperbarui konten
-    // setState(() {
-    //   contentData.add({
-    //     "title": "Konten Baru - Sehatpedia",
-    //     "type": "Artikel",
-    //     "date": "28/8/2021",
-    //     "imagePath": "assets/images/exKonten3.png"
-    //   });
-    // });
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      if (index == 2) {
+        // Clear notification when "Aktivitas" is clicked
+        _hasNewNotification = false;
+      }
+    });
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: const Color(0xFFEEF6FC),
-    resizeToAvoidBottomInset: false,
-    body: SafeArea(
-      child: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 80.0),
-            child: RefreshIndicator(
-              onRefresh: _refreshContent,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: TeksAtas(),
-                    ),
-                    const SizedBox(height: 16),
-                    ListKonten(),
-                  ],
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFEEF6FC),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 80.0),
+              child: RefreshIndicator(
+                onRefresh: _refreshContent,
+                child: SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: teksAtas(),
+                      ),
+                      const SizedBox(height: 16),
+                      listKonten(),
+                    ],
+                  ),
                 ),
               ),
             ),
+            searchBar(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        selectedItemColor: Colors.blue[900],
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        onTap: _onTabTapped,
+        items: [
+          _buildBottomNavigationBarItem(
+            index: 0,
+            label: 'Beranda',
+            iconPath: 'assets/images/beranda.png',
           ),
-          SearchBar(),
+          _buildBottomNavigationBarItem(
+            index: 1,
+            label: 'Konten',
+            iconPath: 'assets/images/konten.png',
+          ),
+          _buildBottomNavigationBarItem(
+            index: 2,
+            label: 'Aktivitas',
+            iconPath: 'assets/images/aktivitas.png',
+            hasNotification: _hasNewNotification,
+          ),
+          _buildBottomNavigationBarItem(
+            index: 3,
+            label: 'Konsultasi',
+            iconPath: 'assets/images/konsultasi.png',
+          ),
         ],
       ),
-    ),
-    bottomNavigationBar: BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.blue[900],
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          label: 'Beranda',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.article),
-          label: 'Konten',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.bar_chart),
-          label: 'Aktivitas',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble),
-          label: 'Konsultasi',
-        ),
-      ],
-      onTap: (index) {
-        // Handle navigation between pages here
-        // Example: setState to switch content or navigate to a new screen
-      },
-    ),
-  );
-}
+    );
+  }
 
+  BottomNavigationBarItem _buildBottomNavigationBarItem({
+    required int index,
+    required String label,
+    required String iconPath,
+    bool hasNotification = false,
+  }) {
+    bool isActive = _currentIndex == index;
 
-  Column TeksAtas() {
+    return BottomNavigationBarItem(
+      icon: Stack(
+        children: [
+          Image.asset(
+            iconPath,
+            color: isActive ? Colors.blue[900] : Colors.grey,
+            height: 24,
+          ),
+          if (isActive)
+            Positioned(
+              top: -10, // Position the blue bar above the icon
+              left: 0,
+              right: 0,
+              child: Image.asset(
+                'assets/images/aktif.png', // Blue bar image for active state
+                height: 5, // Height of the bar
+              ),
+            ),
+          if (hasNotification)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: Image.asset(
+                'assets/images/elips.png',
+                height: 10,
+                width: 10,
+              ),
+            ),
+        ],
+      ),
+      label: label,
+      backgroundColor: Colors.white,
+    );
+  }
+
+  Column teksAtas() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -168,9 +216,9 @@ Widget build(BuildContext context) {
     );
   }
 
-  SizedBox ListKonten() {
+  SizedBox listKonten() {
     return SizedBox(
-      height: 210, // Menentukan tinggi untuk konten horizontal
+      height: 210, // Define height for horizontal content list
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
@@ -179,7 +227,7 @@ Widget build(BuildContext context) {
     );
   }
 
-  Positioned SearchBar() {
+  Positioned searchBar() {
     return Positioned(
       top: 0,
       left: 0,
