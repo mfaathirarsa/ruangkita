@@ -32,6 +32,7 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/logo/
     - assets/images/
+    - assets/icons/
 
   fonts:
     - family: Gotham
