@@ -32,13 +32,6 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/logo/
     - assets/images/
-    - assets/images/beranda.png
-    - assets/images/konten.png
-    - assets/images/aktivitas.png
-    - assets/images/konsultasi.png
-    - assets/images/elips.png
-    - assets/images/aktif.png
-
     - assets/icons/
 
   fonts:

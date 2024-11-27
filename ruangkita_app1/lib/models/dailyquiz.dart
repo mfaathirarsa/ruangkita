@@ -63,9 +63,9 @@ class _DailyQuizWidgetState extends State<DailyQuizWidget> {
             ),
             alignment: Alignment
                 .topCenter, // alignment untuk memindahkan background text
-            child: Text(
+            child: const Text(
               "Daily Quiz:",
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue, // Teks putih
@@ -116,7 +116,7 @@ class _DailyQuizWidgetState extends State<DailyQuizWidget> {
                         color: option.isCorrect ? Colors.green : Colors.red,
                       )
                     else
-                      Icon(
+                      const Icon(
                         Icons.circle_outlined,
                         color: Colors.blue,
                       ),

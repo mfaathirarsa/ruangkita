@@ -104,7 +104,7 @@ class _DashboardState extends State<Dashboard> {
                         child: _buildHeaderText(),
                       ),
                       const SizedBox(height: 16),
-                      listKonten(),
+                      _buildContentList(),
                       DailyQuizWidget(quiz: quiz),
                     ],
                   ),
@@ -121,21 +121,22 @@ class _DashboardState extends State<Dashboard> {
 
   // Build the BottomNavigationBar
   BottomNavigationBar _buildBottomNavigationBar() {
-    return BottomNavigationBar(
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _currentIndex,
-      selectedItemColor: const Color(0xFF63B0E3), // Lighter blue for active items
-      unselectedItemColor: Colors.grey,
-      showUnselectedLabels: true,
-      onTap: _onTabTapped,
-      items: [
-        _buildBottomNavigationBarItem(0, 'Beranda', 'assets/images/beranda.png'),
-        _buildBottomNavigationBarItem(1, 'Konten', 'assets/images/konten.png'),
-        _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/images/aktivitas.png', hasNotification: _hasNewNotification),
-        _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/images/konsultasi.png'),
-      ],
-    );
-  }
+  return BottomNavigationBar(
+    type: BottomNavigationBarType.fixed,
+    currentIndex: _currentIndex,
+    selectedItemColor: const Color(0xFF63B0E3), // Lighter blue for active items
+    unselectedItemColor: Colors.grey,
+    showUnselectedLabels: true,
+    onTap: _onTabTapped,
+    items: [
+      _buildBottomNavigationBarItem(0, 'Beranda', 'assets/icons/beranda.png'),
+      _buildBottomNavigationBarItem(1, 'Konten', 'assets/icons/konten.png'),
+      _buildBottomNavigationBarItem(2, 'Aktivitas', 'assets/icons/aktivitas.png', hasNotification: _hasNewNotification),
+      _buildBottomNavigationBarItem(3, 'Konsultasi', 'assets/icons/konsultasi.png'),
+    ],
+  );
+}
+
 
   // Build a single BottomNavigationBar item
   BottomNavigationBarItem _buildBottomNavigationBarItem(
@@ -148,7 +149,7 @@ class _DashboardState extends State<Dashboard> {
 
     return BottomNavigationBarItem(
       icon: Stack(
-        clipBehavior: Clip.none, // Allow overflow for custom elements
+        clipBehavior: Clip.none,
         children: [
           // Main icon
           Image.asset(
@@ -160,10 +161,10 @@ class _DashboardState extends State<Dashboard> {
           if (isActive)
             Positioned(
               top: -12,
-              left: -5,
-              right: -5, // Adjust position of the active bar
+              left: 0,
+              right: 0,
               child: Image.asset(
-                'assets/images/aktif.png',
+                'assets/icons/aktif.png',
                 height: 10,
               ),
             ),
@@ -173,7 +174,7 @@ class _DashboardState extends State<Dashboard> {
               top: -5,
               right: -5,
               child: Image.asset(
-                'assets/images/elips.png',
+                'assets/icons/elips.png',
                 height: 5,
                 width: 5,
               ),
