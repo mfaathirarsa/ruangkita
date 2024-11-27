@@ -11,7 +11,7 @@ class LoadingScreen extends StatelessWidget {
       if (context.mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => Dashboard()),
+          MaterialPageRoute(builder: (context) => const Dashboard()),
         );
       }
     });
@@ -23,7 +23,7 @@ class LoadingScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/logo/RuangKitaLogo.png', // Gantilah dengan path logo yang sesuai
+              'assets/logo/RuangKitaLogo.png', // Replace with your logo's path
               width: 150,
               height: 150,
             ),
@@ -35,13 +35,16 @@ class LoadingScreen extends StatelessWidget {
 }
 
 class Dashboard extends StatefulWidget {
-  Dashboard({super.key});
+  const Dashboard({super.key});
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+  int _currentIndex = 0; // Variable to track the selected tab index
+  bool _hasNewNotification = true; // Simulate a new notification for "Aktivitas"
+
   final List<Map<String, String>> contentData = [
     {
       "title": "Cara Menjaga Organ Reproduksi Wanita - Sehatpedia",
@@ -68,24 +71,24 @@ class _DashboardState extends State<Dashboard> {
   );
 
   Future<void> _refreshContent() async {
-    // Simulasi delay untuk proses refresh
     await Future.delayed(const Duration(seconds: 2));
+    // Simulate refreshing content
+  }
 
-    // Setelah data baru dimuat, lakukan setState untuk memperbarui konten
-    // setState(() {
-    //   contentData.add({
-    //     "title": "Konten Baru - Sehatpedia",
-    //     "type": "Artikel",
-    //     "date": "28/8/2021",
-    //     "imagePath": "assets/images/exKonten3.png"
-    //   });
-    // });
+  void _onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+      if (index == 2) {
+        // Clear notification when "Aktivitas" is clicked
+        _hasNewNotification = false;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEEF6FC),
+      backgroundColor: const Color(0xFFEEF6FC),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Stack(
@@ -101,7 +104,7 @@ class _DashboardState extends State<Dashboard> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: TeksAtas(),
+                        child: teksAtas(),
                       ),
                       const SizedBox(height: 16),
                       ListKonten(),
@@ -111,14 +114,87 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
             ),
-            SearchBar(),
+            searchBar(),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _currentIndex,
+        selectedItemColor: const Color(0xFF63B0E3), // Lighter blue color for active items
+        unselectedItemColor: Colors.grey,
+        showUnselectedLabels: true,
+        onTap: _onTabTapped,
+        items: [
+          _buildBottomNavigationBarItem(
+            index: 0,
+            label: 'Beranda',
+            iconPath: 'assets/images/beranda.png',
+          ),
+          _buildBottomNavigationBarItem(
+            index: 1,
+            label: 'Konten',
+            iconPath: 'assets/images/konten.png',
+          ),
+          _buildBottomNavigationBarItem(
+            index: 2,
+            label: 'Aktivitas',
+            iconPath: 'assets/images/aktivitas.png',
+            hasNotification: _hasNewNotification,
+          ),
+          _buildBottomNavigationBarItem(
+            index: 3,
+            label: 'Konsultasi',
+            iconPath: 'assets/images/konsultasi.png',
+          ),
+        ],
       ),
     );
   }
 
-  Column TeksAtas() {
+  BottomNavigationBarItem _buildBottomNavigationBarItem({
+    required int index,
+    required String label,
+    required String iconPath,
+    bool hasNotification = false,
+  }) {
+    bool isActive = _currentIndex == index;
+
+    return BottomNavigationBarItem(
+      icon: Stack(
+        children: [
+          Image.asset(
+            iconPath,
+            color: isActive ? const Color(0xFF63B0E3) : Colors.grey, // Lighter blue when active
+            height: 24,
+          ),
+          if (isActive)
+            Positioned(
+              top: -10, // Position the blue bar above the icon
+              left: 0,
+              right: 0,
+              child: Image.asset(
+                'assets/images/aktif.png', // Blue bar image for active state
+                height: 10, // Height of the bar
+              ),
+            ),
+          if (hasNotification)
+            Transform.translate(
+              offset: const Offset(20, -5), // Move it 5 units higher
+              child: Image.asset(
+                'assets/images/elips.png',
+                height: 5,
+                width: 5,
+              ),
+            ),
+        ],
+      ),
+      label: label,
+      backgroundColor: Colors.white,
+    );
+  }
+
+  Column teksAtas() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -151,9 +227,9 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  SizedBox ListKonten() {
+  SizedBox listKonten() {
     return SizedBox(
-      height: 210, // Menentukan tinggi untuk konten horizontal
+      height: 210, // Define height for horizontal content list
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         scrollDirection: Axis.horizontal,
@@ -162,7 +238,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-  Positioned SearchBar() {
+  Positioned searchBar() {
     return Positioned(
       top: 0,
       left: 0,
