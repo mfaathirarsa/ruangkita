@@ -129,23 +129,23 @@ class _DashboardState extends State<Dashboard> {
           _buildBottomNavigationBarItem(
             index: 0,
             label: 'Beranda',
-            iconPath: 'assets/images/beranda.png',
+            iconPath: 'assets/icons/iconBeranda.png',
           ),
           _buildBottomNavigationBarItem(
             index: 1,
             label: 'Konten',
-            iconPath: 'assets/images/konten.png',
+            iconPath: 'assets/icons/iconKonten.png',
           ),
           _buildBottomNavigationBarItem(
             index: 2,
             label: 'Aktivitas',
-            iconPath: 'assets/images/aktivitas.png',
+            iconPath: 'assets/icons/iconAktivitas.png',
             hasNotification: _hasNewNotification,
           ),
           _buildBottomNavigationBarItem(
             index: 3,
             label: 'Konsultasi',
-            iconPath: 'assets/images/konsultasi.png',
+            iconPath: 'assets/icons/iconKonsultasi.png',
           ),
         ],
       ),
