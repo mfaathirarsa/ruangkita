@@ -4,7 +4,7 @@ import '../models/daily_quiz.dart';
 import '../models/recent_question.dart';
 import '../models/menu_bawah.dart';
 
-// Loading Screen Widget
+// Loading screen widget
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({super.key});
 
