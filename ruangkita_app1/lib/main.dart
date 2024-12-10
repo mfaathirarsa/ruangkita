@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/beranda.dart';
+import 'pages/loading_screen.dart';
 
 void main() {
   runApp(const MyApp());
