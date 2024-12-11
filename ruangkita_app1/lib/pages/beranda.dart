@@ -56,12 +56,12 @@ class DashboardState extends State<Dashboard> {
     },
   ];
 
-  // List of pages for navigation (if you want to switch between pages)
+  //Tempat navigasi
   final List<Widget> _pages = [
-    const Dashboard(),      // Your Beranda page content
-    const KontenPage(),       // Your Konten page content
-    const AktivitasPage(),    // Your Aktivitas page content
-    const KonsultasiPage(),   // Your Konsultasi page content
+    const Dashboard(),      
+    const KontenPage(),       
+    const AktivitasPage(),    
+    const KonsultasiPage(),   
   ];
 
   Future<void> _refreshContent() async {
