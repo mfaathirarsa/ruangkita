@@ -4,15 +4,20 @@ import '../models/daily_quiz.dart';
 import '../models/recent_question.dart';
 import '../models/menu_bawah.dart';
 
+// Dummy placeholder pages (replace with your actual page imports)
+import 'aktivitas_page.dart'; // Replace with your actual page imports
+import 'konten_page.dart';     // Replace with your actual page imports
+import 'konsultasi_page.dart'; // Replace with your actual page imports
+
 // Dashboard Widget
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
-  DashboardState createState() => DashboardState(); 
+  DashboardState createState() => DashboardState();
 }
 
-class DashboardState extends State<Dashboard> { 
+class DashboardState extends State<Dashboard> {
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
 
@@ -49,13 +54,14 @@ class DashboardState extends State<Dashboard> {
       "helpfulCount": 4,
       "replyCount": 2,
     },
-    // {
-    //   "username": "Dr. Ratio",
-    //   "question": "Apa efek dari makan makanan yang tidak sehat?",
-    //   "answer": "Hindari makanan cepat saji dan perbanyak sayur serta buah.",
-    //   "helpfulCount": 3,
-    //   "replyCount": 1,
-    // },
+  ];
+
+  // List of pages for navigation (if you want to switch between pages)
+  final List<Widget> _pages = [
+    const Dashboard(),      // Your Beranda page content
+    const KontenPage(),       // Your Konten page content
+    const AktivitasPage(),    // Your Aktivitas page content
+    const KonsultasiPage(),   // Your Konsultasi page content
   ];
 
   Future<void> _refreshContent() async {
@@ -80,28 +86,35 @@ class DashboardState extends State<Dashboard> {
       body: SafeArea(
         child: Stack(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 80.0),
-              child: RefreshIndicator(
-                onRefresh: _refreshContent,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: _buildHeaderText(),
+            // Using IndexedStack to switch between pages (your existing Beranda page remains in the stack)
+            IndexedStack(
+              index: _currentIndex,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 80.0),
+                  child: RefreshIndicator(
+                    onRefresh: _refreshContent,
+                    child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: _buildHeaderText(),
+                          ),
+                          const SizedBox(height: 16),
+                          _buildContentList(),
+                          DailyQuizWidget(quiz: quiz),
+                          const SizedBox(height: 20),
+                          RecentQuestionsWidget(questions: recentQuestions),
+                        ],
                       ),
-                      const SizedBox(height: 16),
-                      _buildContentList(),
-                      DailyQuizWidget(quiz: quiz),
-                      const SizedBox(height: 20),
-                      RecentQuestionsWidget(questions: recentQuestions),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+                ..._pages.sublist(1), // Your other pages can be added here
+              ],
             ),
             _buildSearchBar(),
           ],
