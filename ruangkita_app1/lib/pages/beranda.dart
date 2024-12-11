@@ -9,10 +9,10 @@ class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
 
   @override
-  DashboardState createState() => DashboardState(); // Update the state class name here
+  DashboardState createState() => DashboardState(); 
 }
 
-class DashboardState extends State<Dashboard> { // Change _DashboardState to DashboardState
+class DashboardState extends State<Dashboard> { 
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
 
