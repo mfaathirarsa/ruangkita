@@ -3,10 +3,11 @@ import '../models/konten.dart';
 import '../models/daily_quiz.dart';
 import '../models/recent_question.dart';
 import '../models/menu_bawah.dart';
+import '../models/dashboard_menu.dart';
 
 // Dummy placeholder pages (replace with your actual page imports)
 import 'aktivitas_page.dart'; // Replace with your actual page imports
-import 'konten_page.dart';     // Replace with your actual page imports
+import 'konten_page.dart'; // Replace with your actual page imports
 import 'konsultasi_page.dart'; // Replace with your actual page imports
 
 // Dashboard Widget
@@ -37,7 +38,8 @@ class DashboardState extends State<Dashboard> {
   ];
 
   final DailyQuiz quiz = DailyQuiz(
-    question: "Apa yang perlu dilakukan untuk menjaga kesehatan tubuh di masa remaja?",
+    question:
+        "Apa yang perlu dilakukan untuk menjaga kesehatan tubuh di masa remaja?",
     options: [
       AnswerOption(text: "Makan makanan yang sehat", isCorrect: true),
       AnswerOption(text: "Sering begadang", isCorrect: false),
@@ -49,8 +51,10 @@ class DashboardState extends State<Dashboard> {
   final List<Map<String, dynamic>> recentQuestions = [
     {
       "username": "Dudung",
-      "question": "Bagaimana cara pengobatan yang baik dan benar untuk Ibu kita?",
-      "answer": "Kamu seharusnya begini lalu begitu, kamu harus minum ini 3x sehari.",
+      "question":
+          "Bagaimana cara pengobatan yang baik dan benar untuk Ibu kita?",
+      "answer":
+          "Kamu seharusnya begini lalu begitu, kamu harus minum ini 3x sehari.",
       "helpfulCount": 4,
       "replyCount": 2,
     },
@@ -58,10 +62,10 @@ class DashboardState extends State<Dashboard> {
 
   //Tempat navigasi
   final List<Widget> _pages = [
-    const Dashboard(),      
-    const KontenPage(),       
-    const AktivitasPage(),    
-    const KonsultasiPage(),   
+    const Dashboard(),
+    const KontenPage(),
+    const AktivitasPage(),
+    const KonsultasiPage(),
   ];
 
   Future<void> _refreshContent() async {
@@ -73,7 +77,8 @@ class DashboardState extends State<Dashboard> {
       _currentIndex = index;
 
       if (index == 2) {
-        _hasNewNotification = false; // Hapus notifikasi jika tab "Aktivitas" dibuka
+        _hasNewNotification =
+            false; // Hapus notifikasi jika tab "Aktivitas" dibuka
       }
     });
   }
@@ -100,14 +105,77 @@ class DashboardState extends State<Dashboard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
                             child: _buildHeaderText(),
                           ),
                           const SizedBox(height: 16),
-                          _buildContentList(),
-                          DailyQuizWidget(quiz: quiz),
-                          const SizedBox(height: 20),
-                          RecentQuestionsWidget(questions: recentQuestions),
+
+                          // Tambahkan Widget Tombol Menu di sini
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: GridView.count(
+                              crossAxisCount: 3,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              mainAxisSpacing: 16.0,
+                              crossAxisSpacing: 16.0,
+                              children: [
+                                DashboardMenu(
+                                  icon: Icons.article,
+                                  caption: 'Konten',
+                                  onPressed: () {
+                                    print('Konten clicked');
+                                  },
+                                ),
+                                DashboardMenu(
+                                  icon: Icons.lightbulb,
+                                  caption: 'Aktivitas',
+                                  onPressed: () {
+                                    print('Aktivitas clicked');
+                                  },
+                                ),
+                                DashboardMenu(
+                                  icon: Icons.chat,
+                                  caption: 'Konsultasi',
+                                  onPressed: () {
+                                    print('Konsultasi clicked');
+                                  },
+                                ),
+                                DashboardMenu(
+                                  icon: Icons.quiz,
+                                  caption: 'Kuis',
+                                  onPressed: () {
+                                    print('Kuis clicked');
+                                  },
+                                ),
+                                DashboardMenu(
+                                  icon: Icons.question_answer,
+                                  caption: 'Tanya Anonim',
+                                  onPressed: () {
+                                    print('Tanya Anonim clicked');
+                                  },
+                                ),
+                                DashboardMenu(
+                                  icon: Icons.star,
+                                  caption: 'Premium',
+                                  onPressed: () {
+                                    print('Premium clicked');
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Tetap menjaga widget _buildContentList()
+                          // _buildContentList(),
+
+                          // DailyQuizWidget(quiz: quiz),
+                          // const SizedBox(height: 20),
+                          // RecentQuestionsWidget(questions: recentQuestions),
                         ],
                       ),
                     ),
@@ -134,17 +202,15 @@ class DashboardState extends State<Dashboard> {
       children: [
         Text(
           'Hai, Daffa Pramudya!',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blue[900]),
+          style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.blue[900]),
         ),
         const SizedBox(height: 8),
         Text(
           'Mau belajar apa hari ini?',
           style: TextStyle(fontSize: 16, color: Colors.grey[600]),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          'Ada yang baru nih buat kamu!',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.blue[900]),
         ),
       ],
     );
