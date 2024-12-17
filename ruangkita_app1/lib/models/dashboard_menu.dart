@@ -51,6 +51,7 @@ class DashboardMenu extends StatelessWidget {
                     fontSize: 12.0,
                     fontWeight: FontWeight.w600,
                     color: Colors.black87,
+                    height: 0.8,
                   ),
                 ),
               ],

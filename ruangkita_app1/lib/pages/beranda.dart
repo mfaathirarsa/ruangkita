@@ -4,6 +4,7 @@ import '../models/daily_quiz.dart';
 import '../models/recent_question.dart';
 import '../models/menu_bawah.dart';
 import '../models/dashboard_menu.dart';
+import '../models/daily_quiz_point_dashboard.dart';
 
 // Dummy placeholder pages (replace with your actual page imports)
 import 'aktivitas_page.dart'; // Replace with your actual page imports
@@ -96,7 +97,7 @@ class DashboardState extends State<Dashboard> {
               index: _currentIndex,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 80.0),
+                  padding: const EdgeInsets.only(top: 65.0),
                   child: RefreshIndicator(
                     onRefresh: _refreshContent,
                     child: SingleChildScrollView(
@@ -168,14 +169,17 @@ class DashboardState extends State<Dashboard> {
                             ),
                           ),
 
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 26),
 
                           // Tetap menjaga widget _buildContentList()
-                          // _buildContentList(),
+                          
 
                           // DailyQuizWidget(quiz: quiz),
                           // const SizedBox(height: 20),
                           // RecentQuestionsWidget(questions: recentQuestions),
+                          _buildContentText(),
+                          const SizedBox(height: 16),
+                          _buildContentList(),
                         ],
                       ),
                     ),
@@ -200,6 +204,7 @@ class DashboardState extends State<Dashboard> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 8),
         Text(
           'Hai, Daffa Pramudya!',
           style: TextStyle(
@@ -207,10 +212,29 @@ class DashboardState extends State<Dashboard> {
               fontWeight: FontWeight.bold,
               color: Colors.blue[900]),
         ),
-        const SizedBox(height: 8),
         Text(
           'Mau belajar apa hari ini?',
           style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+        ),
+        const SizedBox(height: 8),
+        TotalPointsWidget(totalPoints: 120),
+      ],
+    );
+  }
+
+  Column _buildContentText() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Ada yang baru nih buat kamu!',
+            style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue[900]),
+          ),
         ),
       ],
     );
