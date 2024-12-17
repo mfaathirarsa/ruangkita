@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../models/konten.dart';
-import '../models/daily_quiz.dart';
-import '../models/recent_question.dart';
-import '../models/menu_bawah.dart';
-import '../models/dashboard_menu.dart';
-import '../models/daily_quiz_point_dashboard.dart';
+import '../models/konten_beranda.dart';
+import '../models/konten_data.dart';
+// import '../models/recent_question.dart';
+// import '../models/recent_question_data.dart';
+import '../models/footer_menu.dart';
+import '../models/menu_beranda_data.dart';
+import '../models/poin_kuis_harian_beranda.dart';
 
-// Dummy placeholder pages (replace with your actual page imports)
-import 'aktivitas_page.dart'; // Replace with your actual page imports
-import 'konten_page.dart'; // Replace with your actual page imports
-import 'konsultasi_page.dart'; // Replace with your actual page imports
+import 'aktivitas_page.dart';
+import 'konten_page.dart';
+import 'konsultasi_page.dart';
 
 // Dashboard Widget
 class Dashboard extends StatefulWidget {
@@ -22,44 +22,6 @@ class Dashboard extends StatefulWidget {
 class DashboardState extends State<Dashboard> {
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
-
-  final List<Map<String, String>> contentData = [
-    {
-      "title": "Cara Menjaga Organ Reproduksi Wanita - Sehatpedia",
-      "type": "Video",
-      "date": "26/8/2021",
-      "imagePath": "assets/images/exKonten1.png"
-    },
-    {
-      "title": "Pentingnya Pengetahuan Kesehatan Reproduksi Bagi Remaja",
-      "type": "Artikel",
-      "date": "26/8/2021",
-      "imagePath": "assets/images/exKonten2.png"
-    },
-  ];
-
-  final DailyQuiz quiz = DailyQuiz(
-    question:
-        "Apa yang perlu dilakukan untuk menjaga kesehatan tubuh di masa remaja?",
-    options: [
-      AnswerOption(text: "Makan makanan yang sehat", isCorrect: true),
-      AnswerOption(text: "Sering begadang", isCorrect: false),
-      AnswerOption(text: "Menghindari olahraga", isCorrect: false),
-      AnswerOption(text: "Merokok", isCorrect: false),
-    ],
-  );
-
-  final List<Map<String, dynamic>> recentQuestions = [
-    {
-      "username": "Dudung",
-      "question":
-          "Bagaimana cara pengobatan yang baik dan benar untuk Ibu kita?",
-      "answer":
-          "Kamu seharusnya begini lalu begitu, kamu harus minum ini 3x sehari.",
-      "helpfulCount": 4,
-      "replyCount": 2,
-    },
-  ];
 
   //Tempat navigasi
   final List<Widget> _pages = [
@@ -122,57 +84,13 @@ class DashboardState extends State<Dashboard> {
                               physics: const NeverScrollableScrollPhysics(),
                               mainAxisSpacing: 16.0,
                               crossAxisSpacing: 16.0,
-                              children: [
-                                DashboardMenu(
-                                  icon: Icons.article,
-                                  caption: 'Konten',
-                                  onPressed: () {
-                                    print('Konten clicked');
-                                  },
-                                ),
-                                DashboardMenu(
-                                  icon: Icons.lightbulb,
-                                  caption: 'Aktivitas',
-                                  onPressed: () {
-                                    print('Aktivitas clicked');
-                                  },
-                                ),
-                                DashboardMenu(
-                                  icon: Icons.chat,
-                                  caption: 'Konsultasi',
-                                  onPressed: () {
-                                    print('Konsultasi clicked');
-                                  },
-                                ),
-                                DashboardMenu(
-                                  icon: Icons.quiz,
-                                  caption: 'Kuis',
-                                  onPressed: () {
-                                    print('Kuis clicked');
-                                  },
-                                ),
-                                DashboardMenu(
-                                  icon: Icons.question_answer,
-                                  caption: 'Tanya Anonim',
-                                  onPressed: () {
-                                    print('Tanya Anonim clicked');
-                                  },
-                                ),
-                                DashboardMenu(
-                                  icon: Icons.star,
-                                  caption: 'Premium',
-                                  onPressed: () {
-                                    print('Premium clicked');
-                                  },
-                                ),
-                              ],
+                              children: generateDashboardMenu,
                             ),
                           ),
 
                           const SizedBox(height: 26),
 
                           // Tetap menjaga widget _buildContentList()
-                          
 
                           // DailyQuizWidget(quiz: quiz),
                           // const SizedBox(height: 20),
@@ -199,7 +117,6 @@ class DashboardState extends State<Dashboard> {
       ),
     );
   }
-
   Column _buildHeaderText() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -6,21 +6,26 @@ class ContentCard extends StatelessWidget {
   final String type;
   final String date;
   final String imagePath;
+  final double width; // Tambahkan parameter untuk lebar card
+  final double imageHeight; // Tambahkan parameter untuk tinggi gambar
 
-  const ContentCard({super.key, 
+  const ContentCard({
+    super.key,
     required this.title,
     required this.type,
     required this.date,
     required this.imagePath,
+    this.width = 200, // Default width
+    this.imageHeight = 120, // Default height untuk gambar
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
+      width: width, // Gunakan parameter untuk lebar
       margin: const EdgeInsets.only(
         right: 12.0,
-        bottom: 8.0, // Beri margin bawah
+        bottom: 8.0,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12.0),
@@ -29,7 +34,7 @@ class ContentCard extends StatelessWidget {
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 6.0,
-            offset: const Offset(0, 3), // Shadow yang tidak terpotong
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -45,12 +50,12 @@ class ContentCard extends StatelessWidget {
                 Image.asset(
                   imagePath,
                   width: double.infinity,
-                  height: 120,
+                  height: imageHeight, // Gunakan parameter untuk tinggi gambar
                   fit: BoxFit.cover,
                 ),
                 if (type == "Video")
                   Container(
-                    height: 120,
+                    height: imageHeight,
                     color: Colors.black.withOpacity(0.3),
                     child: const Center(
                       child: Icon(
