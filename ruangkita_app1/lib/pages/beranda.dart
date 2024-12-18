@@ -134,7 +134,7 @@ class DashboardState extends State<Dashboard> {
           style: TextStyle(fontSize: 16, color: Colors.grey[600]),
         ),
         const SizedBox(height: 8),
-        TotalPointsWidget(totalPoints: 120),
+        const TotalPointsWidget(totalPoints: 120),
       ],
     );
   }

@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class TotalPointsWidget extends StatelessWidget {
   final int totalPoints;
 
-  const TotalPointsWidget({Key? key, required this.totalPoints}) : super(key: key);
+  const TotalPointsWidget({super.key, required this.totalPoints});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: Colors.lightBlue[50],
         border: Border.all(color: Colors.blueAccent),
@@ -16,15 +16,15 @@ class TotalPointsWidget extends StatelessWidget {
       ),
       child: RichText(
         text: TextSpan(
-          style: TextStyle(fontSize: 16, color: Colors.black),
+          style: const TextStyle(fontSize: 16, color: Colors.black),
           children: [
-            TextSpan(
+            const TextSpan(
               text: 'Total poin kuis harian kamu: ',
               style: TextStyle(fontStyle: FontStyle.italic),
             ),
             TextSpan(
               text: '$totalPoints',
-              style: TextStyle(
+              style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.black87,
               ),
