@@ -1,49 +1,46 @@
 import 'package:flutter/material.dart';
 import '../models/menu_beranda.dart';
+import 'package:flutter/foundation.dart'; // For kDebugMode
+
+
+// Function to handle logging
+void logMenuClick(String menuName) {
+  if (kDebugMode) {
+    debugPrint('$menuName clicked');
+  }
+}
 
 List<Widget> get generateDashboardMenu {
   return [
     DashboardMenu(
       icon: Icons.article,
       caption: 'Konten',
-      onPressed: () {
-        print('Konten clicked');
-      },
+      onPressed: () => logMenuClick('Konten'),
     ),
     DashboardMenu(
       icon: Icons.lightbulb,
       caption: 'Aktivitas',
-      onPressed: () {
-        print('Aktivitas clicked');
-      },
+      onPressed: () => logMenuClick('Aktivitas'),
     ),
     DashboardMenu(
       icon: Icons.chat,
       caption: 'Konsultasi',
-      onPressed: () {
-        print('Konsultasi clicked');
-      },
+      onPressed: () => logMenuClick('Konsultasi'),
     ),
     DashboardMenu(
       icon: Icons.quiz,
       caption: 'Kuis',
-      onPressed: () {
-        print('Kuis clicked');
-      },
+      onPressed: () => logMenuClick('Kuis'),
     ),
     DashboardMenu(
       icon: Icons.question_answer,
       caption: 'Tanya Anonim',
-      onPressed: () {
-        print('Tanya Anonim clicked');
-      },
+      onPressed: () => logMenuClick('Tanya Anonim'),
     ),
     DashboardMenu(
       icon: Icons.star,
       caption: 'Premium',
-      onPressed: () {
-        print('Premium clicked');
-      },
+      onPressed: () => logMenuClick('Premium'),
     ),
   ];
 }
