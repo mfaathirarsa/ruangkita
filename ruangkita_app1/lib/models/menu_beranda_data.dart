@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/menu_beranda.dart';
-import 'package:flutter/foundation.dart'; // For kDebugMode
+import 'package:flutter/foundation.dart'; // Buat kDebugMode
 
 
-// Function to handle logging
+// Buat logging
 void logMenuClick(String menuName) {
   if (kDebugMode) {
     debugPrint('$menuName clicked');
