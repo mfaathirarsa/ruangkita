@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/konten_card.dart';
 import '../models/konten_data.dart';
-// import '../models/recent_question.dart';
-// import '../models/recent_question_data.dart';
 import '../models/footer_menu.dart';
 import '../models/menu_beranda_data.dart';
 import '../models/poin_kuis_harian_beranda.dart';
@@ -55,58 +53,61 @@ class DashboardState extends State<Dashboard> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Using IndexedStack to switch between pages (your existing Beranda page remains in the stack)
-            IndexedStack(
-              index: _currentIndex,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 65.0),
-                  child: RefreshIndicator(
-                    onRefresh: _refreshContent,
-                    child: SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: _buildHeaderText(),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Tambahkan Widget Tombol Menu di sini
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: GridView.count(
-                              crossAxisCount: 3,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              mainAxisSpacing: 16.0,
-                              crossAxisSpacing: 16.0,
-                              children: generateDashboardMenu,
+            // Using ScrollConfiguration to hide the scrollbar and other behaviors
+            ScrollConfiguration(
+              behavior: _NoScrollGlow(),
+              child: IndexedStack(
+                index: _currentIndex,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 65.0),
+                    child: RefreshIndicator(
+                      onRefresh: _refreshContent,
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: _buildHeaderText(),
                             ),
-                          ),
+                            const SizedBox(height: 16),
 
-                          const SizedBox(height: 26),
+                            // Tambahkan Widget Tombol Menu di sini
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: GridView.count(
+                                crossAxisCount: 3,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                mainAxisSpacing: 16.0,
+                                crossAxisSpacing: 16.0,
+                                children: generateDashboardMenu,
+                              ),
+                            ),
 
-                          // Tetap menjaga widget _buildContentList()
+                            const SizedBox(height: 26),
 
-                          // DailyQuizWidget(quiz: quiz),
-                          // const SizedBox(height: 20),
-                          // RecentQuestionsWidget(questions: recentQuestions),
-                          _buildContentText(),
-                          const SizedBox(height: 16),
-                          _buildContentList(),
-                          const SizedBox(height: 16),
-                        ],
+                            // Tetap menjaga widget _buildContentList()
+
+                            // DailyQuizWidget(quiz: quiz),
+                            // const SizedBox(height: 20),
+                            // RecentQuestionsWidget(questions: recentQuestions),
+                            _buildContentText(),
+                            const SizedBox(height: 16),
+                            _buildContentList(),
+                            const SizedBox(height: 16),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                ..._pages.sublist(1), // Your other pages can be added here
-              ],
+                  ..._pages.sublist(1), // Your other pages can be added here
+                ],
+              ),
             ),
             _buildSearchBar(),
           ],
@@ -169,15 +170,11 @@ class DashboardState extends State<Dashboard> {
   SizedBox _buildContentList() {
     return SizedBox(
       height: 210,
-      child: Scrollbar(
+      child: ListView(
         controller: _scrollController,
-        thumbVisibility: true,
-        child: ListView(
-          controller: _scrollController,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          scrollDirection: Axis.horizontal,
-          children: _buildContentCards(),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        scrollDirection: Axis.horizontal,
+        children: _buildContentCards(),
       ),
     );
   }
@@ -229,5 +226,14 @@ class DashboardState extends State<Dashboard> {
         ),
       ),
     );
+  }
+}
+
+// Custom ScrollBehavior untuk menyembunyikan scrollbar
+class _NoScrollGlow extends ScrollBehavior {
+  // @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child; // Tidak menampilkan efek glow atau scrollbar
   }
 }

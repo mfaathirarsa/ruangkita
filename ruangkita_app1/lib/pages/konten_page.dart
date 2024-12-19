@@ -23,63 +23,65 @@ class _KontenPageState extends State<KontenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEEF6FC),
-      body: CustomScrollView(
-        slivers: [
-          // AppBar utama
-          const SliverAppBar(
-            title: Text(
-              "Konten",
-              style: TextStyle(color: Colors.black),
+      body: ScrollConfiguration(
+        behavior: _NoScrollGlow(),
+        child: CustomScrollView(
+          slivers: [
+            // AppBar utama
+            const SliverAppBar(
+              title: Text(
+                "Konten",
+                style: TextStyle(color: Colors.black),
+              ),
+              backgroundColor: Colors.white,
+              centerTitle: true,
+              elevation: 0,
+              foregroundColor: Colors.black,
+              pinned: true,
             ),
-            backgroundColor: Colors.white,
-            centerTitle: true,
-            elevation: 0,
-            foregroundColor: Colors.black,
-            pinned: true,
-          ),
 
-          // Spasi sebelum Filter Tag
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 16),
-          ),
-
-          // Filter Tag dengan SliverAppBar
-          SliverAppBar(
-            backgroundColor: const Color(0xFFEEF6FC),
-            floating: true,
-            snap: true,
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            flexibleSpace: _buildTagFilter(),
-            expandedHeight: 50, // Tinggi untuk filter tag
-          ),
-
-          // List konten
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                final konten = _filteredKonten[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-                  child: Column(
-                    children: [
-                      ContentCard(
-                        title: konten['title']!,
-                        type: konten['type']!,
-                        date: konten['date']!,
-                        imagePath: konten['imagePath']!,
-                        width: MediaQuery.of(context).size.width - 20, // Lebar full
-                        imageHeight: 175, // Tinggi gambar disesuaikan
-                      ),
-                      // const SizedBox(height: 12), // Jarak antar kartu
-                    ],
-                  ),
-                );
-              },
-              childCount: _filteredKonten.length,
+            // Spasi sebelum Filter Tag
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 16),
             ),
-          ),
-        ],
+
+            // Filter Tag dengan SliverAppBar
+            SliverAppBar(
+              backgroundColor: const Color(0xFFEEF6FC),
+              floating: true,
+              snap: true,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              flexibleSpace: _buildTagFilter(),
+              expandedHeight: 50, // Tinggi untuk filter tag
+            ),
+
+            // List konten
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final konten = _filteredKonten[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                    child: Column(
+                      children: [
+                        ContentCard(
+                          title: konten['title']!,
+                          type: konten['type']!,
+                          date: konten['date']!,
+                          imagePath: konten['imagePath']!,
+                          width: MediaQuery.of(context).size.width - 20, // Lebar full
+                          imageHeight: 175, // Tinggi gambar disesuaikan
+                        ),
+                      ],
+                    ),
+                  );
+                },
+                childCount: _filteredKonten.length,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -117,5 +119,13 @@ class _KontenPageState extends State<KontenPage> {
         }).toList(),
       ),
     );
+  }
+}
+
+class _NoScrollGlow extends ScrollBehavior {
+  // @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child; // Tidak menampilkan efek glow atau scrollbar
   }
 }
