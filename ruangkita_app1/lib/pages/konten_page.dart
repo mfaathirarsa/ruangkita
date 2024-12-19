@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/konten_data.dart';
+import '../models/konten_card.dart'; // Mengimpor ContentCard dari konten_beranda.dart
 
 class KontenPage extends StatefulWidget {
   const KontenPage({super.key});
@@ -9,7 +10,7 @@ class KontenPage extends StatefulWidget {
 }
 
 class _KontenPageState extends State<KontenPage> {
-  // Tag aktif (default = semua)
+  // Tag aktif (default = Semua)
   String _activeTag = "Semua";
 
   // Filter konten berdasarkan tag
@@ -22,34 +23,60 @@ class _KontenPageState extends State<KontenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEEF6FC),
-      appBar: AppBar(
-        title: const Text("Konten"),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        elevation: 0,
-        foregroundColor: Colors.black,
-      ),
-      body: Column(
-        children: [
-          // Tagging untuk filter
-          const SizedBox(height: 10),
-          _buildTagFilter(),
-          const SizedBox(height: 10),
+      body: CustomScrollView(
+        slivers: [
+          // AppBar utama
+          const SliverAppBar(
+            title: Text(
+              "Konten",
+              style: TextStyle(color: Colors.black),
+            ),
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            elevation: 0,
+            foregroundColor: Colors.black,
+            pinned: true,
+          ),
+
+          // Spasi sebelum Filter Tag
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 16),
+          ),
+
+          // Filter Tag dengan SliverAppBar
+          SliverAppBar(
+            backgroundColor: const Color(0xFFEEF6FC),
+            floating: true,
+            snap: true,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            flexibleSpace: _buildTagFilter(),
+            expandedHeight: 50, // Tinggi untuk filter tag
+          ),
 
           // List konten
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              itemCount: _filteredKonten.length,
-              itemBuilder: (context, index) {
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
                 final konten = _filteredKonten[index];
-                return _buildContentCard(
-                  title: konten['title']!,
-                  type: konten['type']!,
-                  date: konten['date']!,
-                  imagePath: konten['imagePath']!,
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                  child: Column(
+                    children: [
+                      ContentCard(
+                        title: konten['title']!,
+                        type: konten['type']!,
+                        date: konten['date']!,
+                        imagePath: konten['imagePath']!,
+                        width: MediaQuery.of(context).size.width - 20, // Lebar full
+                        imageHeight: 175, // Tinggi gambar disesuaikan
+                      ),
+                      // const SizedBox(height: 12), // Jarak antar kartu
+                    ],
+                  ),
                 );
               },
+              childCount: _filteredKonten.length,
             ),
           ),
         ],
@@ -60,7 +87,7 @@ class _KontenPageState extends State<KontenPage> {
   // Widget filter tagging
   Widget _buildTagFilter() {
     const tags = ["Semua", "Artikel", "Video"];
-    return Padding(
+    return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -88,73 +115,6 @@ class _KontenPageState extends State<KontenPage> {
             ),
           );
         }).toList(),
-      ),
-    );
-  }
-
-  // Widget konten card
-  Widget _buildContentCard({
-    required String title,
-    required String type,
-    required String date,
-    required String imagePath,
-  }) {
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          // Gambar konten
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
-            child: Image.asset(
-              imagePath,
-              width: 100,
-              height: 100,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 10),
-
-          // Detail konten
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  type,
-                  style: TextStyle(
-                    color: type == "Video" ? Colors.red : Colors.blue[700],
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                Text(
-                  date,
-                  style: const TextStyle(
-                    color: Colors.grey,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-        ],
       ),
     );
   }

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 // Widget untuk kartu konten
-class ContentCard extends StatelessWidget {
-  final String title;
-  final String type;
-  final String date;
-  final String imagePath;
-  final double width; // Tambahkan parameter untuk lebar card
-  final double imageHeight; // Tambahkan parameter untuk tinggi gambar
+class ContentCard extends StatefulWidget {
+  String title;
+  String type;
+  String date;
+  String imagePath;
+  double width; // Tambahkan parameter untuk lebar card
+  double imageHeight; // Tambahkan parameter untuk tinggi gambar
 
-  const ContentCard({
+  ContentCard({
     super.key,
     required this.title,
     required this.type,
@@ -20,9 +20,28 @@ class ContentCard extends StatelessWidget {
   });
 
   @override
+  State<ContentCard> createState() => _ContentCardState();
+}
+
+class _ContentCardState extends State<ContentCard> {
+  void updateContent({
+    String? newTitle,
+    String? newType,
+    String? newDate,
+    String? newImagePath,
+  }) {
+    setState(() {
+      if (newTitle != null) widget.title = newTitle;
+      if (newType != null) widget.type = newType;
+      if (newDate != null) widget.date = newDate;
+      if (newImagePath != null) widget.imagePath = newImagePath;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: width, // Gunakan parameter untuk lebar
+      width: widget.width, // Gunakan parameter untuk lebar
       margin: const EdgeInsets.only(
         right: 12.0,
         bottom: 8.0,
@@ -48,14 +67,14 @@ class ContentCard extends StatelessWidget {
             child: Stack(
               children: [
                 Image.asset(
-                  imagePath,
+                  widget.imagePath,
                   width: double.infinity,
-                  height: imageHeight, // Gunakan parameter untuk tinggi gambar
+                  height: widget.imageHeight, // Gunakan parameter untuk tinggi gambar
                   fit: BoxFit.cover,
                 ),
-                if (type == "Video")
+                if (widget.type == "Video")
                   Container(
-                    height: imageHeight,
+                    height: widget.imageHeight,
                     color: Colors.black.withOpacity(0.3),
                     child: const Center(
                       child: Icon(
@@ -74,7 +93,7 @@ class ContentCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  title,
+                  widget.title,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
@@ -88,7 +107,7 @@ class ContentCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      type,
+                      widget.type,
                       style: const TextStyle(
                         fontSize: 12,
                         color: Colors.blue,
@@ -96,7 +115,7 @@ class ContentCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      date,
+                      widget.date,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[600],

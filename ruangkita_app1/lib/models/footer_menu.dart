@@ -19,7 +19,7 @@ class MenuBawah extends StatelessWidget {
       type: BottomNavigationBarType.fixed,
       currentIndex: currentIndex,
       selectedItemColor: const Color(0xFF63B0E3),
-      unselectedItemColor: Colors.grey,
+      unselectedItemColor: const Color.fromARGB(255, 78, 78, 78),
       showUnselectedLabels: true,
       onTap: onTabTapped,
       items: [
@@ -45,7 +45,7 @@ class MenuBawah extends StatelessWidget {
         children: [
           Image.asset(
             iconPath,
-            color: isActive ? const Color(0xFF63B0E3) : Colors.grey,
+            color: isActive ? const Color(0xFF63B0E3) : const Color.fromARGB(255, 78, 78, 78),
             height: 24,
           ),
           if (isActive)

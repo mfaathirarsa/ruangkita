@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/konten_beranda.dart';
+import '../models/konten_card.dart';
 import '../models/konten_data.dart';
 // import '../models/recent_question.dart';
 // import '../models/recent_question_data.dart';
@@ -20,6 +20,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class DashboardState extends State<Dashboard> {
+  final ScrollController _scrollController = ScrollController();
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
 
@@ -98,6 +99,7 @@ class DashboardState extends State<Dashboard> {
                           _buildContentText(),
                           const SizedBox(height: 16),
                           _buildContentList(),
+                          const SizedBox(height: 16),
                         ],
                       ),
                     ),
@@ -117,6 +119,13 @@ class DashboardState extends State<Dashboard> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose(); // Bersihkan ScrollController
+    super.dispose();
+  }
+
   Column _buildHeaderText() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,10 +169,15 @@ class DashboardState extends State<Dashboard> {
   SizedBox _buildContentList() {
     return SizedBox(
       height: 210,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        scrollDirection: Axis.horizontal,
-        children: _buildContentCards(),
+      child: Scrollbar(
+        controller: _scrollController,
+        thumbVisibility: true,
+        child: ListView(
+          controller: _scrollController,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          scrollDirection: Axis.horizontal,
+          children: _buildContentCards(),
+        ),
       ),
     );
   }
