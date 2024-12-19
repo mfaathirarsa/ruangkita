@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/konten_data.dart';
 
 class KontenPage extends StatefulWidget {
   const KontenPage({super.key});
@@ -8,35 +9,13 @@ class KontenPage extends StatefulWidget {
 }
 
 class _KontenPageState extends State<KontenPage> {
-  // Tag aktif (default semua)
+  // Tag aktif (default = semua)
   String _activeTag = "Semua";
-
-  // Data konten
-  final List<Map<String, String>> _konten = [
-    {
-      "title": "Cara Menjaga Organ Reproduksi Wanita",
-      "type": "Video",
-      "date": "26/8/2021",
-      "image": "assets/images/konten_image_video.png"
-    },
-    {
-      "title": "Pentingnya Pengetahuan Kesehatan Reproduksi Bagi Remaja",
-      "type": "Artikel",
-      "date": "26/8/2021",
-      "image": "assets/images/konten_image_artikel.png"
-    },
-    {
-      "title": "Seni Bicara Kesehatan Reproduksi dengan Remaja",
-      "type": "Artikel",
-      "date": "26/8/2021",
-      "image": "assets/images/konten_image_artikel.png"
-    },
-  ];
 
   // Filter konten berdasarkan tag
   List<Map<String, String>> get _filteredKonten {
-    if (_activeTag == "Semua") return _konten;
-    return _konten.where((item) => item['type'] == _activeTag).toList();
+    if (_activeTag == "Semua") return contentData;
+    return contentData.where((item) => item['type'] == _activeTag).toList();
   }
 
   @override
@@ -53,6 +32,7 @@ class _KontenPageState extends State<KontenPage> {
       body: Column(
         children: [
           // Tagging untuk filter
+          const SizedBox(height: 10),
           _buildTagFilter(),
           const SizedBox(height: 10),
 
@@ -67,7 +47,7 @@ class _KontenPageState extends State<KontenPage> {
                   title: konten['title']!,
                   type: konten['type']!,
                   date: konten['date']!,
-                  imagePath: konten['image']!,
+                  imagePath: konten['imagePath']!,
                 );
               },
             ),
