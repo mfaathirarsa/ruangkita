@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'beranda.dart';
 
 // Loading screen widget
 class LoadingScreen extends StatelessWidget {
@@ -9,10 +8,7 @@ class LoadingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 3), () {
       if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const Dashboard()),
-        );
+        Navigator.pushReplacementNamed(context, '/login');
       }
     });
 

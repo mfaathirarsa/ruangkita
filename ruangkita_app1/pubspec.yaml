@@ -12,6 +12,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  sqflite: ^2.2.3 # versi terkini mungkin berbeda
+  sqflite_common_ffi: ^2.2.3
+  # sqflite_common_ffi_web: '^0.4.5+4'
+  path: ^1.8.3
+  http: ^1.2.2
+  bcrypt: ^1.1.3
+
   flutter_localizations:
     sdk: flutter
   flutter_native_splash: ^2.2.8
