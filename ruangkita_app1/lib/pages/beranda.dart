@@ -11,7 +11,8 @@ import 'konsultasi_page.dart';
 
 // Dashboard Widget
 class Dashboard extends StatefulWidget {
-  const Dashboard({super.key});
+  final int userId;
+  const Dashboard({super.key, required this.userId});
 
   @override
   DashboardState createState() => DashboardState();
@@ -22,13 +23,18 @@ class DashboardState extends State<Dashboard> {
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
 
-  //Tempat navigasi
-  final List<Widget> _pages = [
-    const Dashboard(),
-    const KontenPage(),
-    const AktivitasPage(),
-    const KonsultasiPage(),
-  ];
+  late final List<Widget> _pages; // Halaman untuk navigasi
+
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      Dashboard(userId: widget.userId), // Halaman Dashboard
+      const KontenPage(),
+      const AktivitasPage(),
+      const KonsultasiPage(),
+    ];
+  }
 
   Future<void> _refreshContent() async {
     await Future.delayed(const Duration(seconds: 2)); // Simulasi refresh konten
@@ -91,11 +97,6 @@ class DashboardState extends State<Dashboard> {
 
                             const SizedBox(height: 26),
 
-                            // Tetap menjaga widget _buildContentList()
-
-                            // DailyQuizWidget(quiz: quiz),
-                            // const SizedBox(height: 20),
-                            // RecentQuestionsWidget(questions: recentQuestions),
                             _buildContentText(),
                             const SizedBox(height: 16),
                             _buildContentList(),
@@ -105,11 +106,11 @@ class DashboardState extends State<Dashboard> {
                       ),
                     ),
                   ),
-                  ..._pages.sublist(1), // Your other pages can be added here
+                  ..._pages.sublist(1), // Halaman lainnya
                 ],
               ),
             ),
-            _buildSearchBar(),
+            _buildSearchBar(context, widget.userId),
           ],
         ),
       ),
@@ -133,7 +134,7 @@ class DashboardState extends State<Dashboard> {
       children: [
         const SizedBox(height: 8),
         Text(
-          'Hai, Daffa Pramudya!',
+          'Hai, Daffa Pramudya!', // Anda bisa mengganti ini dengan nama pengguna
           style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -193,7 +194,7 @@ class DashboardState extends State<Dashboard> {
     }).toList();
   }
 
-  Positioned _buildSearchBar() {
+  Positioned _buildSearchBar(BuildContext context, int userId) {
     return Positioned(
       top: 0,
       left: 0,
@@ -219,8 +220,17 @@ class DashboardState extends State<Dashboard> {
               ),
             ),
             const SizedBox(width: 8.0),
-            const CircleAvatar(
-              child: Icon(Icons.person),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  '/profile',
+                  arguments: {'userId': userId},
+                );
+              },
+              child: const CircleAvatar(
+                child: Icon(Icons.person),
+              ),
             ),
           ],
         ),
@@ -231,7 +241,7 @@ class DashboardState extends State<Dashboard> {
 
 // Custom ScrollBehavior untuk menyembunyikan scrollbar
 class _NoScrollGlow extends ScrollBehavior {
-  // @override
+  @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child; // Tidak menampilkan efek glow atau scrollbar

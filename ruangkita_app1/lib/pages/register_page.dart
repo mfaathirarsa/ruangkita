@@ -10,7 +10,10 @@ class RegisterScreen extends StatefulWidget {
 
 class RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _usernameController =
+      TextEditingController(); // Controller untuk username
   final _passwordController = TextEditingController();
   final _dbHelper = DatabaseHelper();
 
@@ -23,11 +26,14 @@ class RegisterScreenState extends State<RegisterScreen> {
         _isLoading = true; // Tampilkan loader
       });
 
+      String name = _nameController.text.trim();
+      String email = _emailController.text.trim();
       String username = _usernameController.text.trim();
       String password = _passwordController.text.trim();
 
       try {
-        int id = await _dbHelper.registerUser(username, password);
+        int id = await _dbHelper.registerUser(name, email, username, password);
+
         if (id > 0) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Registrasi berhasil')),
@@ -39,9 +45,13 @@ class RegisterScreenState extends State<RegisterScreen> {
           );
         }
       } catch (e) {
-        if (e.toString().contains('UNIQUE constraint failed')) {
+        if (e.toString().contains('Email sudah terdaftar')) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Username sudah terdaftar')),
+            const SnackBar(content: Text('Email sudah digunakan')),
+          );
+        } else if (e.toString().contains('Username sudah terdaftar')) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Username sudah digunakan')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -68,7 +78,17 @@ class RegisterScreenState extends State<RegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextFormField(
-                controller: _usernameController,
+                controller: _nameController,
+                decoration: const InputDecoration(labelText: 'Nama Lengkap'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Nama lengkap tidak boleh kosong';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -76,6 +96,19 @@ class RegisterScreenState extends State<RegisterScreen> {
                   }
                   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
                     return 'Format email tidak valid';
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: _usernameController,
+                decoration: const InputDecoration(labelText: 'Username'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Username tidak boleh kosong';
+                  }
+                  if (value.length < 3) {
+                    return 'Username harus minimal 3 karakter';
                   }
                   return null;
                 },
@@ -116,6 +149,8 @@ class RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _emailController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
