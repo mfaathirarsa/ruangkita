@@ -9,7 +9,7 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration.zero, () async {
+    Future.delayed(const Duration(seconds: 3), () async {
       final userId = Provider.of<UserProvider>(context, listen: false).userId;
 
       if (userId != null) {
@@ -22,10 +22,19 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFF2280BF),
       body: Center(
-        child: Image.asset(
-          'assets/logo/RuangKitaLogo.png',
-          width: 150,
-          height: 150,
+        child: Builder(
+          builder: (context) {
+            try {
+              return Image.asset(
+                'assets/logo/RuangKitaLogo.png',
+                width: 150,
+                height: 150,
+              );
+            } catch (e) {
+              debugPrint('Error loading image: $e');
+              return const Text('Logo not found');
+            }
+          },
         ),
       ),
     );
