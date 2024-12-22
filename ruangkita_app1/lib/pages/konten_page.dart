@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/konten_data.dart';
 import '../models/konten_card.dart'; // Mengimpor ContentCard dari konten_beranda.dart
+import '../controller/youtube_service.dart';
 
 class KontenPage extends StatefulWidget {
   const KontenPage({super.key});
@@ -10,19 +11,62 @@ class KontenPage extends StatefulWidget {
 }
 
 class _KontenPageState extends State<KontenPage> {
+  final YouTubeService _youTubeService = YouTubeService();
+  bool _isLoading = false;
+
   // Tag aktif (default = Semua)
   String _activeTag = "Semua";
 
   // Filter konten berdasarkan tag
-  List<Map<String, String>> get _filteredKonten {
+  List<Map<String, dynamic>> get _filteredKonten {
     if (_activeTag == "Semua") return contentData;
     return contentData.where((item) => item['type'] == _activeTag).toList();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadVideos();
+    print(contentData);
+  }
+
+  Future<void> _loadVideos() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final videos = await _youTubeService.fetchVideos();
+      print(videos); // Log seluruh respon dari API YouTube.
+
+      setState(() {
+        // Pastikan semua elemen videos sudah memiliki format Map<String, String>
+        contentData.addAll(videos.cast<Map<String, dynamic>>());
+      });
+    } catch (error) {
+      print("Error loading videos: $error");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  String _formatDate(String publishedAt) {
+    if (publishedAt.isEmpty) return 'Unknown Date';
+    try {
+      final date = DateTime.parse(publishedAt);
+      return "${date.day}/${date.month}/${date.year}";
+    } catch (_) {
+      return 'Invalid Date';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEEF6FC),
+      resizeToAvoidBottomInset: false,
       body: ScrollConfiguration(
         behavior: _NoScrollGlow(),
         child: CustomScrollView(
@@ -62,7 +106,8 @@ class _KontenPageState extends State<KontenPage> {
                 (context, index) {
                   final konten = _filteredKonten[index];
                   return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 6.0),
                     child: Column(
                       children: [
                         ContentCard(
@@ -70,8 +115,8 @@ class _KontenPageState extends State<KontenPage> {
                           type: konten['type']!,
                           date: konten['date']!,
                           imagePath: konten['imagePath']!,
-                          width: MediaQuery.of(context).size.width - 20, // Lebar full
-                          imageHeight: 175, // Tinggi gambar disesuaikan
+                          width: MediaQuery.of(context).size.width - 20,
+                          imageHeight: 175,
                         ),
                       ],
                     ),
@@ -123,9 +168,9 @@ class _KontenPageState extends State<KontenPage> {
 }
 
 class _NoScrollGlow extends ScrollBehavior {
-  // @override
+  @override
   Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child; // Tidak menampilkan efek glow atau scrollbar
+    return child;
   }
 }

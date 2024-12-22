@@ -1,4 +1,4 @@
-final List<Map<String, String>> contentData = [
+final List<Map<String, dynamic>> contentData = [
   {
     "title": "Cara Menjaga Organ Reproduksi Wanita - Sehatpedia",
     "type": "Video",

@@ -9,6 +9,8 @@ import 'pages/profile_page.dart';
 import 'pages/profile_page_update.dart';
 import 'pages/profile_page_update_password.dart';
 
+import 'pages/youtube_page_test.dart';
+
 import 'controller/user_provider.dart';
 
 void main() {
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         '/init': (context) => const LoadingScreen(),
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
+        '/video': (context) => Youtube(),
         '/dashboard': (context) {
           final userId = Provider.of<UserProvider>(context).userId;
 

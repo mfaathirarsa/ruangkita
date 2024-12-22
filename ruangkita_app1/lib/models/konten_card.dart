@@ -66,12 +66,47 @@ class _ContentCardState extends State<ContentCard> {
             ),
             child: Stack(
               children: [
-                Image.asset(
-                  widget.imagePath,
-                  width: double.infinity,
-                  height: widget.imageHeight, // Gunakan parameter untuk tinggi gambar
-                  fit: BoxFit.cover,
-                ),
+                widget.imagePath.startsWith('http')
+                    ? Image.network(
+                        widget.imagePath,
+                        width: double.infinity,
+                        height: widget.imageHeight, // Gunakan parameter untuk tinggi gambar
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            width: double.infinity,
+                            height: widget.imageHeight,
+                            color: Colors.grey[300],
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value: loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                        (loadingProgress.expectedTotalBytes ?? 1)
+                                    : null,
+                              ),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: double.infinity,
+                            height: widget.imageHeight,
+                            color: Colors.grey[300],
+                            child: const Icon(
+                              Icons.broken_image,
+                              color: Colors.red,
+                              size: 40,
+                            ),
+                          );
+                        },
+                      )
+                    : Image.asset(
+                        widget.imagePath,
+                        width: double.infinity,
+                        height: widget.imageHeight,
+                        fit: BoxFit.cover,
+                      ),
                 if (widget.type == "Video")
                   Container(
                     height: widget.imageHeight,
@@ -79,7 +114,7 @@ class _ContentCardState extends State<ContentCard> {
                     child: const Center(
                       child: Icon(
                         Icons.play_circle_fill,
-                        color: Colors.black,
+                        color: Colors.white,
                         size: 40,
                       ),
                     ),

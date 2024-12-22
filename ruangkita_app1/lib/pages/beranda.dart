@@ -7,6 +7,7 @@ import '../models/poin_kuis_harian_beranda.dart';
 
 import 'aktivitas_page.dart';
 import 'konten_page.dart';
+import 'youtube_page_test.dart';
 import 'konsultasi_page.dart';
 
 // Dashboard Widget
@@ -31,6 +32,7 @@ class DashboardState extends State<Dashboard> {
     _pages = [
       Dashboard(userId: widget.userId), // Halaman Dashboard
       const KontenPage(),
+      // Youtube(),
       const AktivitasPage(),
       const KonsultasiPage(),
     ];
@@ -170,7 +172,7 @@ class DashboardState extends State<Dashboard> {
 
   SizedBox _buildContentList() {
     return SizedBox(
-      height: 210,
+      height: 220,
       child: ListView(
         controller: _scrollController,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),

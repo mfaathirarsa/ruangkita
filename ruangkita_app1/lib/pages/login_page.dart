@@ -94,50 +94,72 @@ class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      // resizeToAvoidBottomInset: false, // Pindahkan properti ini ke Scaffold
+      // appBar: AppBar(title: const Text('Login')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _loginController,
-                decoration:
-                    const InputDecoration(labelText: 'Email atau Username'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Email atau Username tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Password tidak boleh kosong';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16),
-              _isLoading
-                  ? const CircularProgressIndicator() // Loader saat login
-                  : ElevatedButton(
-                      onPressed: _login,
-                      child: const Text('Login'),
-                    ),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/register');
-                },
-                child: const Text('Belum punya akun? Register'),
-              ),
-            ],
+        child: Center(
+          // Agar seluruh form terpusat di tengah
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment
+                  .center, // Menyusun konten di tengah vertikal
+              children: [
+                // Menambahkan judul "Login" di atas form
+                const Text(
+                  'Login',
+                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 20), // Spasi antara judul dan form
+
+                // Kolom input untuk email atau username
+                TextFormField(
+                  controller: _loginController,
+                  decoration:
+                      const InputDecoration(labelText: 'Email atau Username'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Email atau Username tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16), // Spasi antar kolom
+
+                // Kolom input untuk password
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16), // Spasi antar kolom
+
+                // Loader atau tombol login
+                _isLoading
+                    ? const CircularProgressIndicator() // Loader saat login
+                    : ElevatedButton(
+                        onPressed: _login,
+                        child: const Text('Login'),
+                      ),
+
+                // Tombol untuk menuju halaman register
+                const SizedBox(height: 16), // Spasi antar kolom
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/register');
+                  },
+                  child: const Text('Belum punya akun? Register'),
+                ),
+                // const SizedBox(height: 60), // Spasi antar kolom
+              ],
+            ),
           ),
         ),
       ),
