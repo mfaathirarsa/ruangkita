@@ -41,26 +41,38 @@ class LoginScreenState extends State<LoginScreen> {
         var user = await _dbHelper.loginUserByEmailOrUsername(loginInput);
 
         if (user != null) {
-          // Pastikan id diambil dari hasil query
-          final userId = user['id'] as int?;
-          if (userId == null) {
-            throw Exception('User ID tidak valid');
+          // Ambil hash password dari database
+          final hashedPassword = user['password'] as String;
+
+          // Verifikasi password
+          if (checkPassword(password, hashedPassword)) {
+            // Pastikan id diambil dari hasil query
+            final userId = user['id'] as int?;
+            if (userId == null) {
+              throw Exception('User ID tidak valid');
+            }
+
+            // Simpan userId ke SharedPreferences
+            final prefs = await SharedPreferences.getInstance();
+            prefs.setInt('userId', userId);
+
+            // Simpan ke UserProvider
+            Provider.of<UserProvider>(context, listen: false).setUserId(userId);
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Login berhasil')),
+            );
+
+            // Navigasi ke dashboard
+            Navigator.pushReplacementNamed(context, '/dashboard');
+          } else {
+            // Jika password tidak cocok
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Password salah')),
+            );
           }
-
-          // Simpan userId ke SharedPreferences
-          final prefs = await SharedPreferences.getInstance();
-          prefs.setInt('userId', userId);
-
-          // Simpan ke UserProvider
-          Provider.of<UserProvider>(context, listen: false).setUserId(userId);
-
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Login berhasil')),
-          );
-
-          // Navigasi ke dashboard
-          Navigator.pushReplacementNamed(context, '/dashboard');
         } else {
+          // Jika user tidak ditemukan
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
                 content:

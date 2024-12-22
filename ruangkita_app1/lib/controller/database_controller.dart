@@ -91,7 +91,6 @@ class DatabaseHelper {
   }
 
   /// Login pengguna dengan validasi username dan password
-  /// Login pengguna dengan validasi username dan password
   Future<Map<String, dynamic>?> loginUser(
       String username, String plainPassword) async {
     try {
