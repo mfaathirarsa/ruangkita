@@ -13,8 +13,9 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite: ^2.2.3 # versi terkini mungkin berbeda
+  sqlite3: ^2.5.0
   sqflite_common_ffi: ^2.2.3
-  # sqflite_common_ffi_web: '^0.4.5+4'
+  sqflite_common_ffi_web: '^0.4.5+4'
   path: ^1.8.3
   http: ^1.2.2
   bcrypt: ^1.1.3
