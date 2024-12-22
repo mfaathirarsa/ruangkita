@@ -36,9 +36,9 @@ void main() async {
   } else if (Platform.isWindows) {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
-    open.overrideFor(OperatingSystem.windows, _openSqliteUnderWindows);
-    final db = sqlite3.openInMemory();
-    db.dispose();
+    // open.overrideFor(OperatingSystem.windows, _openSqliteUnderWindows);
+    // final db = sqlite3.openInMemory();
+    // db.dispose();
     print('windows');
   } else {
     // Default for mobile (use regular sqflite)
