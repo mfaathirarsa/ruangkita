@@ -57,6 +57,12 @@ class DashboardState extends State<Dashboard> {
     ];
   }
 
+  void navigateToPage(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
   void _performSearch(String query) {
     SearchBarDashboardController.performSearch(
       currentIndex: _currentIndex,
@@ -142,7 +148,7 @@ class DashboardState extends State<Dashboard> {
     }
   }
 
-  void _onTabTapped(int index) {
+  void onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
       searchController.clear(); // Kosongkan teks di search bar saat tab berubah
@@ -217,7 +223,8 @@ class DashboardState extends State<Dashboard> {
                                   physics: const NeverScrollableScrollPhysics(),
                                   mainAxisSpacing: 16.0,
                                   crossAxisSpacing: 16.0,
-                                  children: generateDashboardMenu,
+                                  children:
+                                      generateDashboardMenu(onTabTapped),
                                 ),
                               ),
 
@@ -248,7 +255,7 @@ class DashboardState extends State<Dashboard> {
         ),
         bottomNavigationBar: MenuBawah(
           currentIndex: _currentIndex,
-          onTabTapped: _onTabTapped,
+          onTabTapped: onTabTapped,
           hasNewNotification: _hasNewNotification,
         ),
       ),

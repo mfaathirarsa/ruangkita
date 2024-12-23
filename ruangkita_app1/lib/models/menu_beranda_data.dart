@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/menu_beranda.dart';
 import 'package:flutter/foundation.dart'; // Buat kDebugMode
 
-
 // Buat logging
 void logMenuClick(String menuName) {
   if (kDebugMode) {
@@ -10,22 +9,25 @@ void logMenuClick(String menuName) {
   }
 }
 
-List<Widget> get generateDashboardMenu {
+List<Widget> generateDashboardMenu(Function(int index) onTabTapped) {
   return [
     DashboardMenu(
       icon: Icons.article,
       caption: 'Konten',
-      onPressed: () => logMenuClick('Konten'),
+      onPressed: () =>
+          onTabTapped(1), // Panggil fungsi onTabTapped dengan indeks 1
     ),
     DashboardMenu(
       icon: Icons.lightbulb,
       caption: 'Aktivitas',
-      onPressed: () => logMenuClick('Aktivitas'),
+      onPressed: () =>
+          onTabTapped(2), // Panggil fungsi onTabTapped dengan indeks 2
     ),
     DashboardMenu(
       icon: Icons.chat,
       caption: 'Konsultasi',
-      onPressed: () => logMenuClick('Konsultasi'),
+      onPressed: () =>
+          onTabTapped(3), // Panggil fungsi onTabTapped dengan indeks 3
     ),
     DashboardMenu(
       icon: Icons.quiz,
