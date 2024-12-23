@@ -55,7 +55,7 @@ class UpdateProfilePageState extends State<UpdateProfilePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profil berhasil diperbarui')),
         );
-        Navigator.pop(context);
+        Navigator.pop(context, name);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error: $e')),

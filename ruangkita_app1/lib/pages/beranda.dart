@@ -9,9 +9,11 @@ import 'aktivitas_page.dart';
 import 'konten_page.dart';
 // import 'youtube_page_test.dart';
 import 'konsultasi_page.dart';
+import 'profile_page.dart';
 
 import '../controller/searchbar_dashboard_controller.dart';
 import '../controller/youtube_service.dart';
+import '../controller/database_controller.dart';
 
 // Dashboard Widget
 class Dashboard extends StatefulWidget {
@@ -28,23 +30,26 @@ class DashboardState extends State<Dashboard> {
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
   final YouTubeService _youTubeService = YouTubeService();
+  final DatabaseHelper _dbHelper = DatabaseHelper();
   bool _isLoading = false;
 
   List<Map<String, dynamic>> _filteredContentData = contentData; // Data filter
   late final List<Widget> _pages; // Halaman untuk navigasi
-  final String _activeTag = "Semua"; // Definisikan tag aktif (default adalah "Semua")
+  final String _activeTag = "Semua"; // tag aktif (default adalah "Semua")
+  String _userName = '';
 
   @override
   void initState() {
     super.initState();
     _loadVideos();
+    _loadUserName();
     print(contentData);
     _pages = [
       Dashboard(userId: widget.userId), // Halaman Dashboard
       KontenPage(
         filteredContent: _filteredContentData,
         searchQuery: searchController.text,
-        searchController: searchController, 
+        searchController: searchController,
       ),
       // Youtube(),
       const AktivitasPage(),
@@ -65,6 +70,21 @@ class DashboardState extends State<Dashboard> {
         });
       },
     );
+  }
+
+  Future<void> _loadUserName() async {
+    try {
+      final user = await _dbHelper.getUserById(widget.userId);
+      if (user != null) {
+        setState(() {
+          _userName = user['name'] ?? ''; // Ambil nama pengguna
+        });
+      } else {
+        print('Pengguna dengan ID ${widget.userId} tidak ditemukan.');
+      }
+    } catch (e) {
+      print('Error loading user name: $e');
+    }
   }
 
   Future<void> _loadVideos() async {
@@ -89,8 +109,37 @@ class DashboardState extends State<Dashboard> {
     }
   }
 
+  void _navigateToProfilePage() async {
+    final updated = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(userId: widget.userId),
+      ),
+    );
+
+    if (updated == true) {
+      _loadUserName(); // Perbarui nama pengguna di beranda
+    }
+  }
+
   Future<void> _refreshContent() async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulasi refresh konten
+    try {
+      // Ambil data pengguna terbaru
+      final user = await _dbHelper.getUserById(widget.userId);
+
+      if (user != null) {
+        setState(() {
+          _userName = user['name'] ?? ''; // Perbarui nama pengguna
+        });
+      } else {
+        print('Pengguna dengan ID ${widget.userId} tidak ditemukan.');
+      }
+
+      // Perbarui data lain di dashboard jika diperlukan
+      // ...
+    } catch (e) {
+      print('Error refreshing content: $e');
+    }
   }
 
   void _onTabTapped(int index) {
@@ -219,7 +268,7 @@ class DashboardState extends State<Dashboard> {
       children: [
         const SizedBox(height: 8),
         Text(
-          'Hai, Daffa Pramudya!', // Anda bisa mengganti ini dengan nama pengguna
+          'Hai, $_userName!', // Anda bisa mengganti ini dengan nama pengguna
           style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -274,7 +323,8 @@ class DashboardState extends State<Dashboard> {
           type: item["type"]!,
           date: item["date"]!,
           imagePath: item["imagePath"]!,
-          searchQuery: searchController.text, // Pass the search query to ContentCard
+          searchQuery:
+              searchController.text, // Pass the search query to ContentCard
         ),
       );
     }).toList();
@@ -311,13 +361,7 @@ class DashboardState extends State<Dashboard> {
             ),
             const SizedBox(width: 8.0),
             GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  '/profile', // Arahkan ke halaman profil
-                  arguments: {'userId': userId}, // Kirim userId sebagai argumen
-                );
-              },
+              onTap: _navigateToProfilePage,
               child: const CircleAvatar(
                 child: Icon(Icons.person), // Ikon profil tetap ada
               ),
