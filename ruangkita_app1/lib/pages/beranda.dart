@@ -11,6 +11,7 @@ import 'konten_page.dart';
 import 'konsultasi_page.dart';
 
 import '../controller/searchbar_dashboard_controller.dart';
+import '../controller/youtube_service.dart';
 
 // Dashboard Widget
 class Dashboard extends StatefulWidget {
@@ -23,22 +24,69 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> {
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController _searchController = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
+  final YouTubeService _youTubeService = YouTubeService();
+  bool _isLoading = false;
 
+  List<Map<String, dynamic>> _filteredContentData = contentData; // Data filter
   late final List<Widget> _pages; // Halaman untuk navigasi
+  final String _activeTag = "Semua"; // Definisikan tag aktif (default adalah "Semua")
 
   @override
   void initState() {
     super.initState();
+    _loadVideos();
+    print(contentData);
     _pages = [
       Dashboard(userId: widget.userId), // Halaman Dashboard
-      const KontenPage(),
+      KontenPage(
+        filteredContent: _filteredContentData,
+        searchQuery: searchController.text,
+        searchController: searchController, 
+      ),
       // Youtube(),
       const AktivitasPage(),
       const KonsultasiPage(),
     ];
+  }
+
+  void _performSearch(String query) {
+    SearchBarDashboardController.performSearch(
+      currentIndex: _currentIndex,
+      query: query,
+      contentData: contentData, // Data yang perlu difilter
+      activeTag: _activeTag, // Tag aktif yang sedang dipilih
+      onResult: (filteredResults) {
+        setState(() {
+          // Perbarui data konten dengan hasil pencarian
+          _filteredContentData = filteredResults;
+        });
+      },
+    );
+  }
+
+  Future<void> _loadVideos() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final videos = await _youTubeService.fetchVideos();
+      print(videos); // Log seluruh respon dari API YouTube.
+
+      setState(() {
+        // Pastikan semua elemen videos sudah memiliki format Map<String, String>
+        contentData.addAll(videos.cast<Map<String, dynamic>>());
+      });
+    } catch (error) {
+      print("Error loading videos: $error");
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   Future<void> _refreshContent() async {
@@ -48,81 +96,112 @@ class DashboardState extends State<Dashboard> {
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-      _searchController
-          .clear(); // Kosongkan teks di search bar saat tab berubah
+      searchController.clear(); // Kosongkan teks di search bar saat tab berubah
       if (index == 2) {
         _hasNewNotification = false;
       }
     });
   }
 
+  Future<bool> _onWillPop() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Konfirmasi'),
+            content:
+                const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
+            actions: [
+              TextButton(
+                onPressed: () =>
+                    Navigator.of(context).pop(false), // Tidak keluar
+                child: const Text('Tidak'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true), // Keluar
+                child: const Text('Ya'),
+              ),
+            ],
+          ),
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFEEF6FC),
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Using ScrollConfiguration to hide the scrollbar and other behaviors
-            ScrollConfiguration(
-              behavior: _NoScrollGlow(),
-              child: IndexedStack(
-                index: _currentIndex,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 65.0),
-                    child: RefreshIndicator(
-                      onRefresh: _refreshContent,
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: _buildHeaderText(),
-                            ),
-                            const SizedBox(height: 16),
-
-                            // Tambahkan Widget Tombol Menu di sini
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: GridView.count(
-                                crossAxisCount: 3,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                mainAxisSpacing: 16.0,
-                                crossAxisSpacing: 16.0,
-                                children: generateDashboardMenu,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: const Color(0xFFEEF6FC),
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // Using ScrollConfiguration to hide the scrollbar and other behaviors
+              ScrollConfiguration(
+                behavior: _NoScrollGlow(),
+                child: IndexedStack(
+                  index: _currentIndex,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 65.0),
+                      child: RefreshIndicator(
+                        onRefresh: _refreshContent,
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: _buildHeaderText(),
                               ),
-                            ),
+                              const SizedBox(height: 16),
 
-                            const SizedBox(height: 26),
+                              // Tambahkan Widget Tombol Menu di sini
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: GridView.count(
+                                  crossAxisCount: 3,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  mainAxisSpacing: 16.0,
+                                  crossAxisSpacing: 16.0,
+                                  children: generateDashboardMenu,
+                                ),
+                              ),
 
-                            _buildContentText(),
-                            const SizedBox(height: 16),
-                            _buildContentList(),
-                            const SizedBox(height: 16),
-                          ],
+                              const SizedBox(height: 26),
+
+                              _buildContentText(),
+                              const SizedBox(height: 16),
+                              _buildContentList(),
+                              const SizedBox(height: 16),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  ..._pages.sublist(1), // Halaman lainnya
-                ],
+                    KontenPage(
+                      filteredContent: _filteredContentData,
+                      searchQuery: searchController.text,
+                      searchController: searchController,
+                    ),
+                    const AktivitasPage(),
+                    const KonsultasiPage(),
+                  ],
+                ),
               ),
-            ),
-            buildSearchBar(context, widget.userId),
-          ],
+              buildSearchBar(context, widget.userId),
+            ],
+          ),
         ),
-      ),
-      bottomNavigationBar: MenuBawah(
-        currentIndex: _currentIndex,
-        onTabTapped: _onTabTapped,
-        hasNewNotification: _hasNewNotification,
+        bottomNavigationBar: MenuBawah(
+          currentIndex: _currentIndex,
+          onTabTapped: _onTabTapped,
+          hasNewNotification: _hasNewNotification,
+        ),
       ),
     );
   }
@@ -130,7 +209,7 @@ class DashboardState extends State<Dashboard> {
   @override
   void dispose() {
     _scrollController.dispose();
-    _searchController.dispose(); // Bersihkan controller saat widget dihapus
+    searchController.dispose(); // Bersihkan controller saat widget dihapus
     super.dispose();
   }
 
@@ -195,6 +274,7 @@ class DashboardState extends State<Dashboard> {
           type: item["type"]!,
           date: item["date"]!,
           imagePath: item["imagePath"]!,
+          searchQuery: searchController.text, // Pass the search query to ContentCard
         ),
       );
     }).toList();
@@ -212,7 +292,7 @@ class DashboardState extends State<Dashboard> {
           children: [
             Expanded(
               child: TextField(
-                controller: _searchController, // Hubungkan controller
+                controller: searchController, // Hubungkan controller
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
                   hintText:
@@ -225,9 +305,8 @@ class DashboardState extends State<Dashboard> {
                   filled: true,
                   fillColor: Colors.grey[200],
                 ),
-                onSubmitted: (query) =>
-                    SearchBarDashboardController.performSearch(
-                        _currentIndex, query),
+                onSubmitted: (query) => _performSearch(query),
+                onChanged: (query) => _performSearch(query),
               ),
             ),
             const SizedBox(width: 8.0),

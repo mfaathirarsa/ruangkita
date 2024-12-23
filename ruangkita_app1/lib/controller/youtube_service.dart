@@ -24,7 +24,7 @@ class YouTubeService {
         return {
           "title": snippet['title'],
           "type": "Video",
-          "date": _formatDate(snippet['publishedAt']),
+          "date": formatDate(snippet['publishedAt']),
           "imagePath": snippet['thumbnails']['default']['url'],
         };
       }));
@@ -37,7 +37,7 @@ class YouTubeService {
     _nextPageToken = null;
   }
 
-  String _formatDate(String dateTime) {
+  String formatDate(String dateTime) {
     final date = DateTime.parse(dateTime);
     return "${date.day}/${date.month}/${date.year}";
   }

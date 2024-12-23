@@ -8,6 +8,7 @@ class ContentCard extends StatefulWidget {
   String imagePath;
   double width; // Tambahkan parameter untuk lebar card
   double imageHeight; // Tambahkan parameter untuk tinggi gambar
+  String searchQuery; // Tambahkan parameter untuk query pencarian
 
   ContentCard({
     super.key,
@@ -17,6 +18,7 @@ class ContentCard extends StatefulWidget {
     required this.imagePath,
     this.width = 200, // Default width
     this.imageHeight = 120, // Default height untuk gambar
+    required this.searchQuery, // Tambahkan query pencarian
   });
 
   @override
@@ -36,6 +38,53 @@ class _ContentCardState extends State<ContentCard> {
       if (newDate != null) widget.date = newDate;
       if (newImagePath != null) widget.imagePath = newImagePath;
     });
+  }
+
+  TextSpan highlightText(String text, String query) {
+    // Tentukan font family yang digunakan
+    TextStyle defaultStyle = const TextStyle(
+      color: Colors.black,
+      fontWeight: FontWeight.bold,
+      fontFamily: 'Gotham', // Ganti dengan nama font family yang Anda inginkan
+    );
+
+    // Jika query kosong, kembalikan teks biasa dengan font yang diinginkan
+    if (query.isEmpty) {
+      return TextSpan(text: text, style: defaultStyle);
+    }
+
+    int startIndex = text.toLowerCase().indexOf(query.toLowerCase());
+
+    if (startIndex == -1) {
+      return TextSpan(text: text, style: defaultStyle);
+    }
+
+    List<TextSpan> spans = [];
+
+    // Teks sebelum query
+    spans.add(TextSpan(
+      text: text.substring(0, startIndex),
+      style: defaultStyle,
+    ));
+
+    // Teks yang sesuai dengan query dan memberi highlight
+    spans.add(TextSpan(
+      text: text.substring(startIndex, startIndex + query.length),
+      style: const TextStyle(
+        color: Color.fromARGB(255, 255, 145, 0), // Warna teks highlight
+        fontWeight: FontWeight.w900,
+        fontFamily:
+            'Gotham', // Ganti dengan nama font family yang Anda inginkan
+      ),
+    ));
+
+    // Teks setelah query
+    spans.add(TextSpan(
+      text: text.substring(startIndex + query.length),
+      style: defaultStyle,
+    ));
+
+    return TextSpan(children: spans);
   }
 
   @override
@@ -70,7 +119,8 @@ class _ContentCardState extends State<ContentCard> {
                     ? Image.network(
                         widget.imagePath,
                         width: double.infinity,
-                        height: widget.imageHeight, // Gunakan parameter untuk tinggi gambar
+                        height: widget
+                            .imageHeight, // Gunakan parameter untuk tinggi gambar
                         fit: BoxFit.cover,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
@@ -80,9 +130,11 @@ class _ContentCardState extends State<ContentCard> {
                             color: Colors.grey[300],
                             child: Center(
                               child: CircularProgressIndicator(
-                                value: loadingProgress.expectedTotalBytes != null
+                                value: loadingProgress.expectedTotalBytes !=
+                                        null
                                     ? loadingProgress.cumulativeBytesLoaded /
-                                        (loadingProgress.expectedTotalBytes ?? 1)
+                                        (loadingProgress.expectedTotalBytes ??
+                                            1)
                                     : null,
                               ),
                             ),
@@ -127,15 +179,11 @@ class _ContentCardState extends State<ContentCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.title,
+                RichText(
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
+                  text: highlightText(widget.title,
+                      widget.searchQuery), // Use highlightText here
                 ),
                 const SizedBox(height: 8.0),
                 Row(

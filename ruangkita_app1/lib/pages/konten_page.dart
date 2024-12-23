@@ -1,65 +1,50 @@
 import 'package:flutter/material.dart';
 import '../models/konten_data.dart';
 import '../models/konten_card.dart'; // Mengimpor ContentCard dari konten_beranda.dart
-import '../controller/youtube_service.dart';
 
 class KontenPage extends StatefulWidget {
-  const KontenPage({super.key});
+  final List<Map<String, dynamic>> filteredContent;
+  final String searchQuery;
+  final TextEditingController searchController; 
+  const KontenPage({
+    super.key,
+    required this.filteredContent,
+    required this.searchQuery,
+    required this.searchController,
+  });
 
   @override
   State<KontenPage> createState() => _KontenPageState();
 }
 
 class _KontenPageState extends State<KontenPage> {
-  final YouTubeService _youTubeService = YouTubeService();
-  bool _isLoading = false;
-
   // Tag aktif (default = Semua)
   String _activeTag = "Semua";
 
-  // Filter konten berdasarkan tag
+  // Filter konten berdasarkan tag dan teks pencarian
   List<Map<String, dynamic>> get _filteredKonten {
-    if (_activeTag == "Semua") return contentData;
-    return contentData.where((item) => item['type'] == _activeTag).toList();
+    // Filter berdasarkan tag
+    final filteredByTag = _activeTag == "Semua"
+        ? widget.filteredContent
+        : widget.filteredContent
+            .where((item) => item['type'] == _activeTag)
+            .toList();
+
+    // Filter berdasarkan teks pencarian
+    if (widget.searchQuery.isEmpty) {
+      return filteredByTag; // Jika query kosong, gunakan hasil filter tag saja
+    }
+
+    return filteredByTag.where((item) {
+      return item['title']
+          .toLowerCase()
+          .contains(widget.searchQuery.toLowerCase());
+    }).toList();
   }
 
   @override
   void initState() {
     super.initState();
-    _loadVideos();
-    print(contentData);
-  }
-
-  Future<void> _loadVideos() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final videos = await _youTubeService.fetchVideos();
-      print(videos); // Log seluruh respon dari API YouTube.
-
-      setState(() {
-        // Pastikan semua elemen videos sudah memiliki format Map<String, String>
-        contentData.addAll(videos.cast<Map<String, dynamic>>());
-      });
-    } catch (error) {
-      print("Error loading videos: $error");
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  String _formatDate(String publishedAt) {
-    if (publishedAt.isEmpty) return 'Unknown Date';
-    try {
-      final date = DateTime.parse(publishedAt);
-      return "${date.day}/${date.month}/${date.year}";
-    } catch (_) {
-      return 'Invalid Date';
-    }
   }
 
   @override
@@ -117,6 +102,7 @@ class _KontenPageState extends State<KontenPage> {
                           imagePath: konten['imagePath']!,
                           width: MediaQuery.of(context).size.width - 20,
                           imageHeight: 175,
+                          searchQuery: widget.searchController.text,
                         ),
                       ],
                     ),
