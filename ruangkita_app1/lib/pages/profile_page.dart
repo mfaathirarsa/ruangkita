@@ -110,13 +110,13 @@ class ProfilePageState extends State<ProfilePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Nama: ${_userData!['name']}',
-                          style: TextStyle(fontSize: 18)),
+                          style: const TextStyle(fontSize: 18)),
                       const SizedBox(height: 8),
                       Text('Username: ${_userData!['username']}',
-                          style: TextStyle(fontSize: 18)),
+                          style: const TextStyle(fontSize: 18)),
                       const SizedBox(height: 8),
                       Text('Email: ${_userData!['email']}',
-                          style: TextStyle(fontSize: 18)),
+                          style: const TextStyle(fontSize: 18)),
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: _navigateToUpdateProfile,

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../controller/youtube_service.dart';
 
 class Youtube extends StatefulWidget {
+  const Youtube({super.key});
+
   @override
   _Youtube createState() => _Youtube();
 }
@@ -72,10 +74,10 @@ class _Youtube extends State<Youtube> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Channel Videos'),
+        title: const Text('Channel Videos'),
       ),
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
               onRefresh: _fetchVideos,
               child: ListView.builder(
@@ -83,7 +85,7 @@ class _Youtube extends State<Youtube> {
                 itemCount: _videos.length + (_isFetchingMore ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index == _videos.length) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   final video = _videos[index];
@@ -93,7 +95,7 @@ class _Youtube extends State<Youtube> {
                     leading: snippet['thumbnails'] != null
                         ? Image.network(
                             snippet['thumbnails']['default']['url'] ?? '')
-                        : Placeholder(), // Ganti Placeholder dengan widget pengganti yang sesuai
+                        : const Placeholder(), // Ganti Placeholder dengan widget pengganti yang sesuai
                     title: Text(snippet['title'] ?? 'No Title'),
                     subtitle: Text(snippet['channelTitle'] ?? 'No Channel'),
                   );

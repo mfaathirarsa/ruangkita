@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AddContentPage extends StatelessWidget {
+  const AddContentPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Konten Terbaru'),
+        title: const Text('Konten Terbaru'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -27,8 +29,8 @@ class AddContentPage extends StatelessWidget {
                 _buildTabButton(context, 'Video', false),
               ],
             ),
-            SizedBox(height: 16),
-            Row(
+            const SizedBox(height: 16),
+            const Row(
               children: [
                 CircleAvatar(
                   radius: 24,
@@ -41,7 +43,7 @@ class AddContentPage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 labelText: 'Judul Artikel',
@@ -50,7 +52,7 @@ class AddContentPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             GestureDetector(
               onTap: () {
                 // Handle thumbnail upload
@@ -61,7 +63,7 @@ class AddContentPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: Colors.grey),
                 ),
-                child: Center(
+                child: const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -74,7 +76,7 @@ class AddContentPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               maxLines: 8,
               decoration: InputDecoration(
@@ -84,7 +86,7 @@ class AddContentPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -97,7 +99,7 @@ class AddContentPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                child: Text('UNGGAH', style: TextStyle(fontSize: 16)),
+                child: const Text('UNGGAH', style: TextStyle(fontSize: 16)),
               ),
             ),
           ],
@@ -113,7 +115,7 @@ class AddContentPage extends StatelessWidget {
           // Handle tab switch
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             color: isSelected ? Colors.lightBlue : Colors.white,
             borderRadius: BorderRadius.circular(8.0),

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AddVideoPage extends StatelessWidget {
+  const AddVideoPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Konten Terbaru'),
+        title: const Text('Konten Terbaru'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -27,8 +29,8 @@ class AddVideoPage extends StatelessWidget {
                 _buildTabButton(context, 'Video', true),
               ],
             ),
-            SizedBox(height: 16),
-            Row(
+            const SizedBox(height: 16),
+            const Row(
               children: [
                 CircleAvatar(
                   radius: 24,
@@ -41,17 +43,17 @@ class AddVideoPage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               decoration: InputDecoration(
                 labelText: 'Masukkan link',
-                prefixIcon: Icon(Icons.link),
+                prefixIcon: const Icon(Icons.link),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             GestureDetector(
               onTap: () {
                 // Handle image upload
@@ -62,7 +64,7 @@ class AddVideoPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                   border: Border.all(color: Colors.grey),
                 ),
-                child: Center(
+                child: const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -75,7 +77,7 @@ class AddVideoPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               maxLines: 3,
               decoration: InputDecoration(
@@ -85,7 +87,7 @@ class AddVideoPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -98,7 +100,7 @@ class AddVideoPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-                child: Text('UNGGAH', style: TextStyle(fontSize: 16)),
+                child: const Text('UNGGAH', style: TextStyle(fontSize: 16)),
               ),
             ),
           ],
@@ -114,7 +116,7 @@ class AddVideoPage extends StatelessWidget {
           // Handle tab switch
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 12),
+          padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
             color: isSelected ? Colors.lightBlue : Colors.white,
             borderRadius: BorderRadius.circular(8.0),

@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class ArticlePage extends StatelessWidget {
+  const ArticlePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Artikel'),
+        title: const Text('Artikel'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.of(context).pop();
           },
@@ -21,7 +23,7 @@ class ArticlePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Ayo Cuci Tangan 6 Langkah Agar Tangan Bersih dan Bebas Kuman!',
                 style: TextStyle(
                   fontSize: 20,
@@ -29,22 +31,22 @@ class ArticlePage extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Image.network(
                 'https://bumninc.com/cegah-penularan-covid-19-unduh-aplikasi-pengingat-cuci-tangan/',
                 height: 200,
                 fit: BoxFit.cover,
               ),
-              SizedBox(height: 8),
-              Text(
+              const SizedBox(height: 8),
+              const Text(
                 'Senin, 23 Desember 2024 11:11 WIB',
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'Menjaga kebersihan tangan menjadi hal utama dalam pencegahan dan pengendalian infeksi. Menurut penelitian dengan mencuci tangan yang benar dapat menurunkan angka penularan penyakit menular (seperti influenza, diare, hingga hepatitis A) hingga 50%. Oleh karena itu penting sekali untuk mengetahui cara mencuci tangan yang baik dan benar sesuai dengan Standar World Health Organization (WHO).\n\nCuci tangan dilakukan dengan menggosokkan tangan menggunakan cairan antiseptik (handrub) sekitar 20-30 detik atau dengan air mengalir dan sabun antiseptik (handwash) sekitar 40-60 detik.',
                 style: TextStyle(
                   fontSize: 14,
@@ -52,8 +54,8 @@ class ArticlePage extends StatelessWidget {
                   height: 1.5,
                 ),
               ),
-              SizedBox(height: 16),
-              Row(
+              const SizedBox(height: 16),
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
