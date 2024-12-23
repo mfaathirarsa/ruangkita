@@ -7,8 +7,10 @@ import '../models/poin_kuis_harian_beranda.dart';
 
 import 'aktivitas_page.dart';
 import 'konten_page.dart';
-import 'youtube_page_test.dart';
+// import 'youtube_page_test.dart';
 import 'konsultasi_page.dart';
+
+import '../controller/searchbar_dashboard_controller.dart';
 
 // Dashboard Widget
 class Dashboard extends StatefulWidget {
@@ -21,6 +23,7 @@ class Dashboard extends StatefulWidget {
 
 class DashboardState extends State<Dashboard> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
 
@@ -45,10 +48,10 @@ class DashboardState extends State<Dashboard> {
   void _onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
-
+      _searchController
+          .clear(); // Kosongkan teks di search bar saat tab berubah
       if (index == 2) {
-        _hasNewNotification =
-            false; // Hapus notifikasi jika tab "Aktivitas" dibuka
+        _hasNewNotification = false;
       }
     });
   }
@@ -112,7 +115,7 @@ class DashboardState extends State<Dashboard> {
                 ],
               ),
             ),
-            _buildSearchBar(context, widget.userId),
+            buildSearchBar(context, widget.userId),
           ],
         ),
       ),
@@ -126,7 +129,8 @@ class DashboardState extends State<Dashboard> {
 
   @override
   void dispose() {
-    _scrollController.dispose(); // Bersihkan ScrollController
+    _scrollController.dispose();
+    _searchController.dispose(); // Bersihkan controller saat widget dihapus
     super.dispose();
   }
 
@@ -196,7 +200,7 @@ class DashboardState extends State<Dashboard> {
     }).toList();
   }
 
-  Positioned _buildSearchBar(BuildContext context, int userId) {
+  Positioned buildSearchBar(BuildContext context, int userId) {
     return Positioned(
       top: 0,
       left: 0,
@@ -208,9 +212,11 @@ class DashboardState extends State<Dashboard> {
           children: [
             Expanded(
               child: TextField(
+                controller: _searchController, // Hubungkan controller
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
-                  hintText: 'Cari artikel, video, kuis, atau lainnya...',
+                  hintText:
+                      SearchBarDashboardController.getHintText(_currentIndex),
                   hintStyle: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
@@ -219,6 +225,9 @@ class DashboardState extends State<Dashboard> {
                   filled: true,
                   fillColor: Colors.grey[200],
                 ),
+                onSubmitted: (query) =>
+                    SearchBarDashboardController.performSearch(
+                        _currentIndex, query),
               ),
             ),
             const SizedBox(width: 8.0),
@@ -226,12 +235,12 @@ class DashboardState extends State<Dashboard> {
               onTap: () {
                 Navigator.pushNamed(
                   context,
-                  '/profile',
-                  arguments: {'userId': userId},
+                  '/profile', // Arahkan ke halaman profil
+                  arguments: {'userId': userId}, // Kirim userId sebagai argumen
                 );
               },
               child: const CircleAvatar(
-                child: Icon(Icons.person),
+                child: Icon(Icons.person), // Ikon profil tetap ada
               ),
             ),
           ],

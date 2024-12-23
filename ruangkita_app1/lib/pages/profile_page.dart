@@ -61,9 +61,30 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   /// Fungsi logout dan arahkan ke halaman login
-  void _logout() {
-    // Menghapus semua route sebelumnya agar tidak bisa kembali ke halaman profil
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  void _logout() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Konfirmasi Logout'),
+          content: const Text('Apakah Anda yakin ingin logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Batal'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
   }
 
   @override
@@ -88,11 +109,14 @@ class ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Nama: ${_userData!['name']}', style: TextStyle(fontSize: 18)),
+                      Text('Nama: ${_userData!['name']}',
+                          style: TextStyle(fontSize: 18)),
                       const SizedBox(height: 8),
-                      Text('Username: ${_userData!['username']}', style: TextStyle(fontSize: 18)),
+                      Text('Username: ${_userData!['username']}',
+                          style: TextStyle(fontSize: 18)),
                       const SizedBox(height: 8),
-                      Text('Email: ${_userData!['email']}', style: TextStyle(fontSize: 18)),
+                      Text('Email: ${_userData!['email']}',
+                          style: TextStyle(fontSize: 18)),
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed: _navigateToUpdateProfile,

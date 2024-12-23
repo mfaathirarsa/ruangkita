@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/video': (context) => Youtube(),
-        '/dashboard': (context) {
+        '/dashboard': (BuildContext context) {
           final userId = Provider.of<UserProvider>(context).userId;
 
           if (userId == null) {
