@@ -296,14 +296,15 @@ class DatabaseHelper {
         'type': contentData["type"],
         'imagePath': contentData["imagePath"],
         'content': contentData["type"] == "Artikel"
-            ? "Isi artikel belum diatur."
+            ? (contentData["content"] ?? "Isi artikel belum diatur.")
             : null,
-        'videoUrl':
-            contentData["type"] == "Video" ? "URL video belum diatur." : null,
+        'videoUrl': contentData["type"] == "Video"
+            ? (contentData["videoUrl"] ?? "URL video belum diatur.")
+            : null,
         'timestamp': DateTime.now().toIso8601String(),
         'likes': 0,
       },
-      conflictAlgorithm: ConflictAlgorithm.ignore, // Hindari duplikasi data
+      conflictAlgorithm: ConflictAlgorithm.replace, // Update jika konflik
     );
   }
 

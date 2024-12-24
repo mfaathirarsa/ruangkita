@@ -55,86 +55,122 @@ class _KontenPageState extends State<KontenPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFEEF6FC),
       resizeToAvoidBottomInset: false,
-      body: ScrollConfiguration(
-        behavior: _NoScrollGlow(),
-        child: CustomScrollView(
-          slivers: [
-            // AppBar utama
-            const SliverAppBar(
-              title: Text(
-                "Konten",
-                style: TextStyle(color: Colors.black),
-              ),
-              backgroundColor: Colors.white,
-              centerTitle: true,
-              elevation: 0,
-              foregroundColor: Colors.black,
-              pinned: true,
-            ),
+      body: Stack(
+        children: [
+          ScrollConfiguration(
+            behavior: _NoScrollGlow(),
+            child: CustomScrollView(
+              slivers: [
+                // AppBar utama
+                const SliverAppBar(
+                  title: Text(
+                    "Konten",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  backgroundColor: Colors.white,
+                  centerTitle: true,
+                  elevation: 0,
+                  foregroundColor: Colors.black,
+                  pinned: true,
+                ),
 
-            // Spasi sebelum Filter Tag
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 16),
-            ),
+                // Spasi sebelum Filter Tag
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 16),
+                ),
 
-            // Gunakan SliverPersistentHeader untuk Filter Tag
-            SliverPersistentHeader(
-              pinned: true,
-              floating: false,
-              delegate: _TagFilterHeader(
-                child: _buildTagFilter(),
-                minExtent: 50,
-                maxExtent: 50,
-              ),
-            ),
+                // Gunakan SliverPersistentHeader untuk Filter Tag
+                SliverPersistentHeader(
+                  pinned: true,
+                  floating: false,
+                  delegate: _TagFilterHeader(
+                    child: _buildTagFilter(),
+                    minExtent: 50,
+                    maxExtent: 50,
+                  ),
+                ),
 
-            // List konten
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final konten = _filteredKonten[index];
-                  return GestureDetector(
-                    onTap: () {
-                      if (konten['type'] == 'Artikel') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ArticlePage(content: konten),
+                // List konten
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final konten = _filteredKonten[index];
+                      return GestureDetector(
+                        onTap: () {
+                          if (konten['type'] == 'Artikel') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    ArticlePage(content: konten),
+                              ),
+                            );
+                          } else if (konten['type'] == 'Video') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    VideoPage(content: konten),
+                              ),
+                            );
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 6.0),
+                          child: Column(
+                            children: [
+                              ContentCard(
+                                title: konten['title']!,
+                                type: konten['type']!,
+                                date: konten['date']!,
+                                imagePath: konten['imagePath']!,
+                                width: MediaQuery.of(context).size.width - 20,
+                                imageHeight: 175,
+                                searchQuery: widget.searchController.text,
+                              ),
+                            ],
                           ),
-                        );
-                      } else if (konten['type'] == 'Video') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => VideoPage(content: konten),
-                          ),
-                        );
-                      }
+                        ),
+                      );
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 6.0),
-                      child: Column(
-                        children: [
-                          ContentCard(
-                            title: konten['title']!,
-                            type: konten['type']!,
-                            date: konten['date']!,
-                            imagePath: konten['imagePath']!,
-                            width: MediaQuery.of(context).size.width - 20,
-                            imageHeight: 175,
-                            searchQuery: widget.searchController.text,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-                childCount: _filteredKonten.length,
-              ),
+                    childCount: _filteredKonten.length,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+
+          // FloatingActionButtons
+          Positioned(
+            bottom: 16,
+            right: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FloatingActionButton(
+                  onPressed: () {
+                    // Aksi untuk tombol edit konten
+                    print('Edit konten');
+                  },
+                  heroTag: "editButton",
+                  backgroundColor: Colors.blue,
+                  child: const Icon(Icons.edit),
+                ),
+                const SizedBox(height: 10),
+                FloatingActionButton(
+                  onPressed: () {
+                    // Aksi untuk tombol post konten
+                    print('Post konten');
+                  },
+                  heroTag: "postButton",
+                  backgroundColor: Colors.blue,
+                  child: const Icon(Icons.add),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

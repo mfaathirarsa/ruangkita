@@ -41,7 +41,7 @@ class DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    _youtubeService.fetchAndSaveVideos();
+    _initializeYouTubeVideos();
     _loadUserName();
     print(contentData);
     _pages = [
@@ -61,6 +61,37 @@ class DashboardState extends State<Dashboard> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  Future<void> _initializeYouTubeVideos() async {
+    try {
+      print("Memulai fetch video dari YouTube...");
+      await _youtubeService.fetchAndSaveVideos();
+      print("Selesai fetch video dari YouTube.");
+      await _loadContentData(); // Memuat data terbaru ke UI
+    } catch (e) {
+      print("Error saat fetch video: $e");
+    }
+  }
+
+  Future<void> _loadContentData() async {
+    try {
+      // Memuat data dari database
+      final contentList = await _dbHelper.fetchContentData();
+      if (contentList.isNotEmpty) {
+        setState(() {
+          // Menggabungkan data baru dengan data yang sudah ada
+          _filteredContentData.addAll(contentList);
+          
+          // _filteredContentData = contentList; // Memperbarui data di UI
+        });
+        print('Data konten berhasil dimuat: $_filteredContentData');
+      } else {
+        print('Tidak ada data konten yang ditemukan di database.');
+      }
+    } catch (e) {
+      print('Error loading content data: $e');
+    }
   }
 
   void _performSearch(String query) {

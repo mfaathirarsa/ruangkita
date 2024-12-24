@@ -4,7 +4,7 @@ import 'database_controller.dart';
 
 class YouTubeService {
   final String apiKey = 'AIzaSyC-2Cs2mAOYXxlcFfAS7fAbnqdfewHZ4PI';
-  final String channelId = 'UC8WIrO3hSfKrJxAZLMHIS2g';
+  final String channelId = 'UCoNrZLYzYTLow9OnyANLqrQ'; //Manni Gaming
 
   String? _nextPageToken;
 
