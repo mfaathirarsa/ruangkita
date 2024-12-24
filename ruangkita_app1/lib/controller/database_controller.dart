@@ -3,40 +3,91 @@ import 'package:path/path.dart';
 import 'package:bcrypt/bcrypt.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper._internal();
+  // Singleton instance
+  static final DatabaseHelper instance = DatabaseHelper._init();
+
   static Database? _database;
 
-  factory DatabaseHelper() {
-    return _instance;
-  }
+  // Private constructor
+  DatabaseHelper._init();
 
-  DatabaseHelper._internal();
-
+  // Getter for database
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDatabase();
+    _database = await _initDB('app.db');
     return _database!;
   }
 
-  Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'app.db');
+  // Initialize database
+  Future<Database> _initDB(String fileName) async {
+    final dbPath = await getDatabasesPath();
+    final path = join(dbPath, fileName);
+
     return await openDatabase(
       path,
       version: 1,
-      onCreate: _onCreate,
+      onCreate: _createDB,
     );
   }
 
-  Future _onCreate(Database db, int version) async {
+  // Create tables
+// Create tables
+  Future<void> _createDB(Database db, int version) async {
     await db.execute('''
     CREATE TABLE users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,        -- Nama lengkap
-      email TEXT NOT NULL UNIQUE, -- Email harus unik
-      username TEXT NOT NULL UNIQUE, -- Username harus unik
-      password TEXT NOT NULL
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      username TEXT NOT NULL UNIQUE,
+      password TEXT NOT NULL,
+      isAdmin INTEGER DEFAULT 0
     )
   ''');
+
+    await db.execute('''
+    CREATE TABLE content (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      type TEXT NOT NULL, -- "Article" atau "Video"
+      imagePath TEXT,
+      content TEXT,
+      videoUrl TEXT,
+      timestamp TEXT NOT NULL,
+      likes INTEGER DEFAULT 0
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE user_likes (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER NOT NULL,
+      contentId INTEGER NOT NULL,
+      FOREIGN KEY (userId) REFERENCES users(id),
+      FOREIGN KEY (contentId) REFERENCES content(id)
+    )
+  ''');
+
+    await db.execute('''
+    CREATE TABLE comments (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      userId INTEGER NOT NULL,
+      contentId INTEGER NOT NULL,
+      comment TEXT NOT NULL,
+      timestamp TEXT NOT NULL,
+      FOREIGN KEY (userId) REFERENCES users(id),
+      FOREIGN KEY (contentId) REFERENCES content(id)
+    )
+  ''');
+
+    // Tambahkan akun admin secara langsung
+    final hashedPassword = _hashPassword('111111'); // Password admin
+    await db.insert('users', {
+      'name': 'Administrator',
+      'email': 'admin@a.a',
+      'username': 'admin',
+      'password': hashedPassword,
+      'isAdmin': 1, // Tandai sebagai admin
+    });
   }
 
   /// Hash password menggunakan bcrypt
@@ -209,6 +260,200 @@ class DatabaseHelper {
       where: 'id = ?',
       whereArgs: [userId],
     );
+  }
+
+  // FUNGSI KONTEN
+  Future<List<Map<String, dynamic>>> fetchContentData() async {
+    final db = await database;
+
+    // Ambil semua data dari tabel content
+    final List<Map<String, dynamic>> contentList = await db.query('content');
+
+    // Konversi data ke format yang lengkap sesuai dengan database
+    return contentList.map((content) {
+      return {
+        "id": content["id"], // ID konten
+        "title": content["title"], // Judul konten
+        "type": content["type"], // Tipe konten (Artikel/Video)
+        "date": content["timestamp"]
+            .split('T')[0], // Tanggal dengan format "YYYY-MM-DD"
+        "imagePath": content["imagePath"], // Jalur gambar
+        "content": content["content"], // Isi artikel
+        "videoUrl": content["videoUrl"], // URL video
+        "likes": content["likes"], // Jumlah like
+      };
+    }).toList();
+  }
+
+  Future<void> sendContentData(Map<String, dynamic> contentData) async {
+    final db = await DatabaseHelper.instance.database;
+
+    // Masukkan data ke dalam tabel 'content'
+    await db.insert(
+      'content',
+      {
+        'title': contentData["title"],
+        'type': contentData["type"],
+        'imagePath': contentData["imagePath"],
+        'content': contentData["type"] == "Artikel"
+            ? "Isi artikel belum diatur."
+            : null,
+        'videoUrl':
+            contentData["type"] == "Video" ? "URL video belum diatur." : null,
+        'timestamp': DateTime.now().toIso8601String(),
+        'likes': 0,
+      },
+      conflictAlgorithm: ConflictAlgorithm.ignore, // Hindari duplikasi data
+    );
+  }
+
+  // Fungsi untuk menambahkan konten baru (hanya untuk admin)
+  Future<int> addContent({
+    required String title,
+    required String type,
+    required String? imagePath,
+    required String? content,
+    required String? videoUrl,
+  }) async {
+    final db = await database;
+
+    // Validasi tipe konten
+    if (type != 'Article' && type != 'Video') {
+      throw Exception('Tipe konten tidak valid. Harus "Article" atau "Video".');
+    }
+
+    // Timestamp saat ini
+    String timestamp = DateTime.now().toIso8601String();
+
+    // Simpan data konten ke database
+    return await db.insert('content', {
+      'title': title,
+      'type': type,
+      'imagePath': imagePath,
+      'content': content,
+      'videoUrl': videoUrl,
+      'timestamp': timestamp,
+      'likes': 0,
+    });
+  }
+
+// Fungsi untuk mendapatkan semua konten
+  Future<List<Map<String, dynamic>>> getAllContent() async {
+    final db = await database;
+    return await db.query('content');
+  }
+
+// Fungsi untuk mendapatkan konten berdasarkan tipe (Article atau Video)
+  Future<List<Map<String, dynamic>>> getContentByType(String type) async {
+    final db = await database;
+    return await db.query('content', where: 'type = ?', whereArgs: [type]);
+  }
+
+// Fungsi untuk mendapatkan konten berdasarkan ID
+  Future<Map<String, dynamic>?> getContentById(int contentId) async {
+    final db = await database;
+    List<Map<String, dynamic>> results = await db.query(
+      'content',
+      where: 'id = ?',
+      whereArgs: [contentId],
+    );
+
+    if (results.isNotEmpty) {
+      return results.first;
+    }
+    return null;
+  }
+
+// Fungsi untuk menambahkan like pada konten
+  Future<void> likeContent(int userId, int contentId) async {
+    final db = await database;
+
+    // Periksa apakah user sudah memberikan like
+    List<Map<String, dynamic>> existingLike = await db.query(
+      'user_likes',
+      where: 'userId = ? AND contentId = ?',
+      whereArgs: [userId, contentId],
+    );
+
+    if (existingLike.isNotEmpty) {
+      throw Exception('User sudah memberikan like pada konten ini.');
+    }
+
+    // Tambahkan like ke tabel user_likes
+    await db.insert('user_likes', {'userId': userId, 'contentId': contentId});
+
+    // Perbarui jumlah like pada konten
+    await db.rawUpdate(
+      'UPDATE content SET likes = likes + 1 WHERE id = ?',
+      [contentId],
+    );
+  }
+
+// Fungsi untuk menghapus like dari konten
+  Future<void> unlikeContent(int userId, int contentId) async {
+    final db = await database;
+
+    // Hapus like dari tabel user_likes
+    int rowsAffected = await db.delete(
+      'user_likes',
+      where: 'userId = ? AND contentId = ?',
+      whereArgs: [userId, contentId],
+    );
+
+    if (rowsAffected == 0) {
+      throw Exception('User belum memberikan like pada konten ini.');
+    }
+
+    // Kurangi jumlah like pada konten
+    await db.rawUpdate(
+      'UPDATE content SET likes = likes - 1 WHERE id = ?',
+      [contentId],
+    );
+  }
+
+// Fungsi untuk menambahkan komentar
+  Future<int> addComment({
+    required int userId,
+    required int contentId,
+    required String comment,
+  }) async {
+    final db = await database;
+
+    // Timestamp saat ini
+    String timestamp = DateTime.now().toIso8601String();
+
+    return await db.insert('comments', {
+      'userId': userId,
+      'contentId': contentId,
+      'comment': comment,
+      'timestamp': timestamp,
+    });
+  }
+
+// Fungsi untuk mendapatkan komentar berdasarkan konten
+  Future<List<Map<String, dynamic>>> getCommentsByContent(int contentId) async {
+    final db = await database;
+    return await db
+        .query('comments', where: 'contentId = ?', whereArgs: [contentId]);
+  }
+
+// Fungsi untuk mendapatkan komentar berdasarkan pengguna
+  Future<List<Map<String, dynamic>>> getCommentsByUser(int userId) async {
+    final db = await database;
+    return await db.query('comments', where: 'userId = ?', whereArgs: [userId]);
+  }
+
+// Fungsi untuk menghapus konten (hanya untuk admin)
+  Future<void> deleteContent(int contentId) async {
+    final db = await database;
+
+    // Hapus semua like dan komentar terkait konten
+    await db
+        .delete('user_likes', where: 'contentId = ?', whereArgs: [contentId]);
+    await db.delete('comments', where: 'contentId = ?', whereArgs: [contentId]);
+
+    // Hapus konten dari tabel content
+    await db.delete('content', where: 'id = ?', whereArgs: [contentId]);
   }
 
   /// Menutup database (opsional)

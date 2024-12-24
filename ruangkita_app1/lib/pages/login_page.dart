@@ -17,7 +17,7 @@ class LoginScreenState extends State<LoginScreen> {
   final _loginController =
       TextEditingController(); // Satu kolom untuk email/username
   final _passwordController = TextEditingController();
-  final _dbHelper = DatabaseHelper();
+  final _dbHelper = DatabaseHelper.instance;
 
   bool _isLoading = false; // Untuk menampilkan loader
 

@@ -13,7 +13,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  final _dbHelper = DatabaseHelper();
+  final _dbHelper = DatabaseHelper.instance;
   Map<String, dynamic>? _userData;
 
   bool _isLoading = true;

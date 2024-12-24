@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import '../models/konten_data.dart';
 import '../models/konten_card.dart'; // Mengimpor ContentCard dari konten_beranda.dart
 
+import 'konten_viewartikel_page.dart';
+import 'konten_viewvideo_page.dart';
+
 class KontenPage extends StatefulWidget {
   final List<Map<String, dynamic>> filteredContent;
   final String searchQuery;
-  final TextEditingController searchController; 
+  final TextEditingController searchController;
   const KontenPage({
     super.key,
     required this.filteredContent,
@@ -74,15 +77,15 @@ class _KontenPageState extends State<KontenPage> {
               child: SizedBox(height: 16),
             ),
 
-            // Filter Tag dengan SliverAppBar
-            SliverAppBar(
-              backgroundColor: const Color(0xFFEEF6FC),
-              floating: true,
-              snap: true,
-              elevation: 0,
-              automaticallyImplyLeading: false,
-              flexibleSpace: _buildTagFilter(),
-              expandedHeight: 50, // Tinggi untuk filter tag
+            // Gunakan SliverPersistentHeader untuk Filter Tag
+            SliverPersistentHeader(
+              pinned: true,
+              floating: false,
+              delegate: _TagFilterHeader(
+                child: _buildTagFilter(),
+                minExtent: 50,
+                maxExtent: 50,
+              ),
             ),
 
             // List konten
@@ -90,21 +93,40 @@ class _KontenPageState extends State<KontenPage> {
               delegate: SliverChildBuilderDelegate(
                 (context, index) {
                   final konten = _filteredKonten[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 6.0),
-                    child: Column(
-                      children: [
-                        ContentCard(
-                          title: konten['title']!,
-                          type: konten['type']!,
-                          date: konten['date']!,
-                          imagePath: konten['imagePath']!,
-                          width: MediaQuery.of(context).size.width - 20,
-                          imageHeight: 175,
-                          searchQuery: widget.searchController.text,
-                        ),
-                      ],
+                  return GestureDetector(
+                    onTap: () {
+                      if (konten['type'] == 'Artikel') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ArticlePage(content: konten),
+                          ),
+                        );
+                      } else if (konten['type'] == 'Video') {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VideoPage(content: konten),
+                          ),
+                        );
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 6.0),
+                      child: Column(
+                        children: [
+                          ContentCard(
+                            title: konten['title']!,
+                            type: konten['type']!,
+                            date: konten['date']!,
+                            imagePath: konten['imagePath']!,
+                            width: MediaQuery.of(context).size.width - 20,
+                            imageHeight: 175,
+                            searchQuery: widget.searchController.text,
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -150,6 +172,32 @@ class _KontenPageState extends State<KontenPage> {
         }).toList(),
       ),
     );
+  }
+}
+
+class _TagFilterHeader extends SliverPersistentHeaderDelegate {
+  final Widget child;
+  final double minExtent;
+  final double maxExtent;
+
+  _TagFilterHeader({
+    required this.child,
+    required this.minExtent,
+    required this.maxExtent,
+  });
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: const Color(0xFFEEF6FC),
+      child: child,
+    );
+  }
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }
 

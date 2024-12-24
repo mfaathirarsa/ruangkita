@@ -29,8 +29,8 @@ class DashboardState extends State<Dashboard> {
   final TextEditingController searchController = TextEditingController();
   int _currentIndex = 0; // Index untuk tab saat ini
   bool _hasNewNotification = true; // Simulasi notifikasi baru di "Aktivitas"
-  final YouTubeService _youTubeService = YouTubeService();
-  final DatabaseHelper _dbHelper = DatabaseHelper();
+  final YouTubeService _youtubeService = YouTubeService();
+  final DatabaseHelper _dbHelper = DatabaseHelper.instance;
   bool _isLoading = false;
 
   List<Map<String, dynamic>> _filteredContentData = contentData; // Data filter
@@ -41,7 +41,7 @@ class DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    _loadVideos();
+    _youtubeService.fetchAndSaveVideos();
     _loadUserName();
     print(contentData);
     _pages = [
@@ -90,28 +90,6 @@ class DashboardState extends State<Dashboard> {
       }
     } catch (e) {
       print('Error loading user name: $e');
-    }
-  }
-
-  Future<void> _loadVideos() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final videos = await _youTubeService.fetchVideos();
-      print(videos); // Log seluruh respon dari API YouTube.
-
-      setState(() {
-        // Pastikan semua elemen videos sudah memiliki format Map<String, String>
-        contentData.addAll(videos.cast<Map<String, dynamic>>());
-      });
-    } catch (error) {
-      print("Error loading videos: $error");
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
     }
   }
 
@@ -202,41 +180,37 @@ class DashboardState extends State<Dashboard> {
                       child: RefreshIndicator(
                         onRefresh: _refreshContent,
                         child: SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: _buildHeaderText(),
-                              ),
-                              const SizedBox(height: 16),
-
-                              // Tambahkan Widget Tombol Menu di sini
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16.0),
-                                child: GridView.count(
-                                  crossAxisCount: 3,
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  mainAxisSpacing: 16.0,
-                                  crossAxisSpacing: 16.0,
-                                  children:
-                                      generateDashboardMenu(onTabTapped),
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: _buildHeaderText(),
                                 ),
-                              ),
-
-                              const SizedBox(height: 26),
-
-                              _buildContentText(),
-                              const SizedBox(height: 16),
-                              _buildContentList(),
-                              const SizedBox(height: 16),
-                            ],
-                          ),
-                        ),
+                                const SizedBox(height: 16),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16.0),
+                                  child: GridView.count(
+                                    crossAxisCount: 3,
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    mainAxisSpacing: 16.0,
+                                    crossAxisSpacing: 16.0,
+                                    children:
+                                        generateDashboardMenu(onTabTapped),
+                                  ),
+                                ),
+                                const SizedBox(height: 26),
+                                _buildContentText(),
+                                const SizedBox(height: 16),
+                                _buildContentList(), // Tetap horizontal
+                                const SizedBox(height: 16),
+                              ],
+                            )),
                       ),
                     ),
                     KontenPage(
@@ -309,14 +283,40 @@ class DashboardState extends State<Dashboard> {
     );
   }
 
-  SizedBox _buildContentList() {
+  Widget _buildContentList() {
     return SizedBox(
-      height: 220,
-      child: ListView(
-        controller: _scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      height: 220, // Sesuaikan tinggi kontainer sesuai kebutuhan
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        children: _buildContentCards(),
+        itemCount: _filteredContentData.length,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        itemBuilder: (context, index) {
+          final content = _filteredContentData[index];
+
+          return Padding(
+            padding: const EdgeInsets.only(
+                right: 12.0), // Memberikan jarak antar item
+            child: ContentCard(
+              title: content['title'],
+              type: content['type'],
+              date: content['date'],
+              imagePath: content['imagePath'],
+              searchQuery: searchController.text,
+              onTap: () {
+                // Navigasi sesuai tipe konten
+                final route = content['type'] == 'Artikel'
+                    ? '/kontenViewArtikel'
+                    : '/kontenViewVideo';
+
+                Navigator.pushNamed(
+                  context,
+                  route,
+                  arguments: content, // Kirim data konten sebagai argument
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -352,8 +352,7 @@ class DashboardState extends State<Dashboard> {
                 controller: searchController, // Hubungkan controller
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
-                  hintText:
-                      SearchBarDashboardModel.getHintText(_currentIndex),
+                  hintText: SearchBarDashboardModel.getHintText(_currentIndex),
                   hintStyle: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),

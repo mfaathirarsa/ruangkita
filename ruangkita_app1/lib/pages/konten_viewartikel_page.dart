@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ArticlePage extends StatelessWidget {
-  const ArticlePage({super.key});
+  final Map<String, dynamic> content;
+
+  const ArticlePage({Key? key, required this.content}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,38 +25,54 @@ class ArticlePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Ayo Cuci Tangan 6 Langkah Agar Tangan Bersih dan Bebas Kuman!',
-                style: TextStyle(
+              // Judul artikel diambil dari `content['title']`
+              Text(
+                content['title'] ?? 'Judul Tidak Tersedia',
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
               const SizedBox(height: 16),
+
+              // Gambar diambil dari `content['imagePath']`
               Image.network(
-                'https://bumninc.com/wp-content/uploads/2020/12/43039-588x400.jpg',
+                content['imagePath'] ?? '',
                 height: 200,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Icon(
+                    Icons.broken_image,
+                    size: 200,
+                    color: Colors.grey,
+                  );
+                },
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Senin, 23 Desember 2024 11:11 WIB',
-                style: TextStyle(
+
+              // Tanggal diambil dari `content['date']`
+              Text(
+                content['date'] ?? 'Tanggal Tidak Tersedia',
+                style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Menjaga kebersihan tangan menjadi hal utama dalam pencegahan dan pengendalian infeksi. Menurut penelitian dengan mencuci tangan yang benar dapat menurunkan angka penularan penyakit menular (seperti influenza, diare, hingga hepatitis A) hingga 50%. Oleh karena itu penting sekali untuk mengetahui cara mencuci tangan yang baik dan benar sesuai dengan Standar World Health Organization (WHO).\n\nCuci tangan dilakukan dengan menggosokkan tangan menggunakan cairan antiseptik (handrub) sekitar 20-30 detik atau dengan air mengalir dan sabun antiseptik (handwash) sekitar 40-60 detik. \n\nCuci tangan dilakukan dengan menggosokkan tangan menggunakan cairan antiseptik (handrub) sekitar 20-30 detik atau dengan air mengalir dan sabun antiseptik (handwash) sekitar 40-60 detik.',
-                style: TextStyle(
+
+              // Konten artikel diambil dari `content['content']`
+              Text(
+                content['content'] ?? 'Konten tidak tersedia.',
+                style: const TextStyle(
                   fontSize: 14,
                   color: Colors.black,
                   height: 1.5,
                 ),
               ),
               const SizedBox(height: 16),
+
+              // Aksi interaktif (Like, Comment, Share)
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

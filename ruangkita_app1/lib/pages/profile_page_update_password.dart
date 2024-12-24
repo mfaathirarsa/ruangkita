@@ -15,7 +15,7 @@ class UpdatePasswordPageState extends State<UpdatePasswordPage> {
   final _currentPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _dbHelper = DatabaseHelper();
+  final _dbHelper = DatabaseHelper.instance;
 
   bool _isLoading = false;
 

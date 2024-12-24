@@ -15,7 +15,7 @@ class UpdateProfilePageState extends State<UpdateProfilePage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
-  final _dbHelper = DatabaseHelper();
+  final _dbHelper = DatabaseHelper.instance;
 
   bool _isLoading = false;
 

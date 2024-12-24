@@ -15,7 +15,7 @@ class RegisterScreenState extends State<RegisterScreen> {
   final _usernameController =
       TextEditingController(); // Controller untuk username
   final _passwordController = TextEditingController();
-  final _dbHelper = DatabaseHelper();
+  final _dbHelper = DatabaseHelper.instance;
 
   bool _isLoading = false; // Indikator proses registrasi
 

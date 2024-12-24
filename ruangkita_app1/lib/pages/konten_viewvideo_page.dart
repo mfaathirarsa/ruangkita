@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class VideoPage extends StatelessWidget {
-  const VideoPage({Key? key}) : super(key: key);
+  final Map<String, dynamic> content;
+
+  const VideoPage({Key? key, required this.content}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class VideoPage extends StatelessWidget {
             Stack(
               children: [
                 Image.network(
-                  'https://bumninc.com/cegah-penularan-covid-19-unduh-aplikasi-pengingat-cuci-tangan/',
+                  'https://bumninc.com/wp-content/uploads/2020/12/43039-588x400.jpg',
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: 200,

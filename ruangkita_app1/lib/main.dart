@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ruangkita_app1/pages/konten_viewvideo_page.dart';
 
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
@@ -10,6 +11,7 @@ import 'pages/profile_page_update.dart';
 import 'pages/profile_page_update_password.dart';
 
 import 'controller/user_provider.dart';
+import '../controller/database_controller.dart';
 
 // For testing purpose
 import 'pages/youtube_page_test.dart';
@@ -18,6 +20,10 @@ import 'pages/konten_addvideo_page.dart';
 import 'pages/konten_viewartikel_page.dart';
 
 void main() {
+
+  // Initialize the database (SQLite, Hive, etc.)
+  DatabaseHelper.instance; // Example for custom database initialization
+
   runApp(
     MultiProvider(
       providers: [
@@ -44,7 +50,7 @@ class MyApp extends StatelessWidget {
         // '/init': (context) => const ArticlePage(), // For testing purpose
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
-        '/video': (context) => const Youtube(),
+        // '/video': (context) => const Youtube(),
         '/dashboard': (BuildContext context) {
           final userId = Provider.of<UserProvider>(context).userId;
 
@@ -69,6 +75,16 @@ class MyApp extends StatelessWidget {
         '/updateProfile': (context) {
           final userId = Provider.of<UserProvider>(context).userId;
           return UpdateProfilePage(userId: userId!);
+        },
+        '/kontenViewArtikel': (context) {
+          final content = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return ArticlePage(content: content);
+        },
+        '/kontenViewVideo': (context) {
+          final content = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return VideoPage(content: content);
         },
       },
     );
