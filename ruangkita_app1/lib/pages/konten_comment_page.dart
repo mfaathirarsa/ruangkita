@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CommentPage extends StatelessWidget {
-  const CommentPage({Key? key}) : super(key: key);
+  const CommentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +18,19 @@ class CommentPage extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(16.0),
-              children: [
-                const CommentTile(
+              children: const [
+                CommentTile(
                   username: 'User',
                   comment: 'Bagaimana cara pengobatan yang baik dan benar untuk ini kak?',
                 ),
-                const AdminReply(
+                AdminReply(
                   reply: 'Kamu seharusnya begini lalu begitu, kamu harus minum ini 3x sehari',
                 ),
-                const CommentTile(
+                CommentTile(
                   username: 'User',
                   comment: 'Setelah itu, apa yang harus saya lakukan lagi kak?',
                 ),
-                const AdminReply(
+                AdminReply(
                   reply: 'Kamu seharusnya begini lalu begitu lagi',
                 ),
               ],
@@ -77,10 +77,10 @@ class CommentTile extends StatelessWidget {
   final String comment;
 
   const CommentTile({
-    Key? key,
+    super.key,
     required this.username,
     required this.comment,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +116,9 @@ class AdminReply extends StatelessWidget {
   final String reply;
 
   const AdminReply({
-    Key? key,
+    super.key,
     required this.reply,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
