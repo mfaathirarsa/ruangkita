@@ -13,9 +13,6 @@ import 'controller/user_provider.dart';
 
 // For testing purpose
 import 'pages/youtube_page_test.dart';
-import 'pages/konten_addartikel_page.dart';
-import 'pages/konten_addvideo_page.dart';
-import 'pages/konten_viewartikel_page.dart';
 
 void main() {
   runApp(
