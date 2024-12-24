@@ -383,7 +383,7 @@ class DashboardState extends State<Dashboard> {
 // Custom ScrollBehavior untuk menyembunyikan scrollbar
 class _NoScrollGlow extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(
+  Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child; // Tidak menampilkan efek glow atau scrollbar
   }

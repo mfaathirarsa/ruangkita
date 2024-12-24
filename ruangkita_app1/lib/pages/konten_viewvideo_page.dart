@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class VideoPage extends StatelessWidget {
-  const VideoPage({super.key});
+  const VideoPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,27 +41,27 @@ class VideoPage extends StatelessWidget {
                 ),
               ],
             ),
-            const Padding(
-              padding: EdgeInsets.all(16.0),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Tutorial Cuci Tangan 6 Langkah!',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 8),
-                  Text(
+                  const SizedBox(height: 8),
+                  const Text(
                     'Senin, 23 Desember 2024',
                     style: TextStyle(
                       color: Colors.grey,
                     ),
                   ),
-                  SizedBox(height: 16),
-                  Text(
+                  const SizedBox(height: 16),
+                  const Text(
                     'Menjaga kebersihan tangan menjadi hal utama dalam pencegahan dan pengendalian infeksi. Menurut penelitian dengan mencuci tangan yang benar dapat menurunkan angka penularan penyakit menular (seperti influenza, diare, hingga hepatitis A) hingga 50%. Oleh karena itu penting sekali untuk mengetahui cara mencuci tangan yang baik dan benar sesuai dengan Standar World Health Organization (WHO).',
                     style: TextStyle(fontSize: 16),
                   ),

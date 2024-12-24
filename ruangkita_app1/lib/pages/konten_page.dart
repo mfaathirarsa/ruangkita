@@ -155,7 +155,7 @@ class _KontenPageState extends State<KontenPage> {
 
 class _NoScrollGlow extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(
+  Widget buildViewportChrome(
       BuildContext context, Widget child, AxisDirection axisDirection) {
     return child;
   }
