@@ -1,6 +1,6 @@
-// searchbar_dashboard_controller.dart
 
-class SearchBarDashboardController {
+
+class SearchBarDashboardModel {
   static String getHintText(int currentIndex) {
     switch (currentIndex) {
       case 0:

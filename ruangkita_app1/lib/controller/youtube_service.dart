@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 class YouTubeService {
   final String apiKey = 'AIzaSyC-2Cs2mAOYXxlcFfAS7fAbnqdfewHZ4PI';
-  final String channelId = 'UC8WIrO3hSfKrJxAZLMHIS2g'; // Ganti dengan ID channel.
+  final String channelId = 'UC8WIrO3hSfKrJxAZLMHIS2g';
 
   String? _nextPageToken;
 

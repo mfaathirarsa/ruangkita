@@ -33,7 +33,7 @@ class ArticlePage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Image.network(
-                'https://bumninc.com/cegah-penularan-covid-19-unduh-aplikasi-pengingat-cuci-tangan/',
+                'https://bumninc.com/wp-content/uploads/2020/12/43039-588x400.jpg',
                 height: 200,
                 fit: BoxFit.cover,
               ),
@@ -47,7 +47,7 @@ class ArticlePage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               const Text(
-                'Menjaga kebersihan tangan menjadi hal utama dalam pencegahan dan pengendalian infeksi. Menurut penelitian dengan mencuci tangan yang benar dapat menurunkan angka penularan penyakit menular (seperti influenza, diare, hingga hepatitis A) hingga 50%. Oleh karena itu penting sekali untuk mengetahui cara mencuci tangan yang baik dan benar sesuai dengan Standar World Health Organization (WHO).\n\nCuci tangan dilakukan dengan menggosokkan tangan menggunakan cairan antiseptik (handrub) sekitar 20-30 detik atau dengan air mengalir dan sabun antiseptik (handwash) sekitar 40-60 detik.',
+                'Menjaga kebersihan tangan menjadi hal utama dalam pencegahan dan pengendalian infeksi. Menurut penelitian dengan mencuci tangan yang benar dapat menurunkan angka penularan penyakit menular (seperti influenza, diare, hingga hepatitis A) hingga 50%. Oleh karena itu penting sekali untuk mengetahui cara mencuci tangan yang baik dan benar sesuai dengan Standar World Health Organization (WHO).\n\nCuci tangan dilakukan dengan menggosokkan tangan menggunakan cairan antiseptik (handrub) sekitar 20-30 detik atau dengan air mengalir dan sabun antiseptik (handwash) sekitar 40-60 detik. \n\nCuci tangan dilakukan dengan menggosokkan tangan menggunakan cairan antiseptik (handrub) sekitar 20-30 detik atau dengan air mengalir dan sabun antiseptik (handwash) sekitar 40-60 detik.',
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.black,

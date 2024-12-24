@@ -6,6 +6,7 @@ class AddContentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // Pindahkan properti ini ke Scaffold
       appBar: AppBar(
         title: const Text('Konten Terbaru'),
         leading: IconButton(

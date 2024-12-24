@@ -9,9 +9,13 @@ import 'pages/profile_page.dart';
 import 'pages/profile_page_update.dart';
 import 'pages/profile_page_update_password.dart';
 
-import 'pages/youtube_page_test.dart';
-
 import 'controller/user_provider.dart';
+
+// For testing purpose
+import 'pages/youtube_page_test.dart';
+import 'pages/konten_addartikel_page.dart';
+import 'pages/konten_addvideo_page.dart';
+import 'pages/konten_viewartikel_page.dart';
 
 void main() {
   runApp(
@@ -37,6 +41,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/init',
       routes: {
         '/init': (context) => const LoadingScreen(),
+        // '/init': (context) => const ArticlePage(), // For testing purpose
         '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegisterScreen(),
         '/video': (context) => const Youtube(),

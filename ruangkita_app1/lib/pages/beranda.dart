@@ -11,7 +11,7 @@ import 'konten_page.dart';
 import 'konsultasi_page.dart';
 import 'profile_page.dart';
 
-import '../controller/searchbar_dashboard_controller.dart';
+import '../models/searchbar_dashboard_model.dart';
 import '../controller/youtube_service.dart';
 import '../controller/database_controller.dart';
 
@@ -64,7 +64,7 @@ class DashboardState extends State<Dashboard> {
   }
 
   void _performSearch(String query) {
-    SearchBarDashboardController.performSearch(
+    SearchBarDashboardModel.performSearch(
       currentIndex: _currentIndex,
       query: query,
       contentData: contentData, // Data yang perlu difilter
@@ -353,7 +353,7 @@ class DashboardState extends State<Dashboard> {
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.search),
                   hintText:
-                      SearchBarDashboardController.getHintText(_currentIndex),
+                      SearchBarDashboardModel.getHintText(_currentIndex),
                   hintStyle: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(20.0),
