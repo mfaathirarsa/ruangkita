@@ -7,7 +7,7 @@ class EditArticlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Konten Terbaru'),
+        title: const Text('Edit Artikel'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -81,7 +81,7 @@ class EditArticlePage extends StatelessWidget {
               const TextField(
                 maxLines: 6,
                 decoration: InputDecoration(
-                  labelText: 'Tulis artikel',
+                  labelText: 'Edit isi artikel',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   ),

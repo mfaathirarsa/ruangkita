@@ -150,8 +150,7 @@ class _KontenPageState extends State<KontenPage> {
               children: [
                 FloatingActionButton(
                   onPressed: () {
-                    // Aksi untuk tombol edit konten
-                    print('Edit konten');
+                    Navigator.pushNamed(context, '/editartikel');
                   },
                   heroTag: "editButton",
                   backgroundColor: Colors.blue,
@@ -160,8 +159,7 @@ class _KontenPageState extends State<KontenPage> {
                 const SizedBox(height: 10),
                 FloatingActionButton(
                   onPressed: () {
-                    // Aksi untuk tombol post konten
-                    print('Post konten');
+                    Navigator.pushNamed(context, '/postartikel');
                   },
                   heroTag: "postButton",
                   backgroundColor: Colors.blue,

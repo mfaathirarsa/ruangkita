@@ -18,9 +18,9 @@ import 'pages/youtube_page_test.dart';
 import 'pages/konten_addartikel_page.dart';
 import 'pages/konten_addvideo_page.dart';
 import 'pages/konten_viewartikel_page.dart';
+import 'pages/konten_editartikel_page.dart';
 
 void main() {
-
   // Initialize the database (SQLite, Hive, etc.)
   DatabaseHelper.instance; // Example for custom database initialization
 
@@ -86,6 +86,10 @@ class MyApp extends StatelessWidget {
               as Map<String, dynamic>;
           return VideoPage(content: content);
         },
+        '/postartikel': (context) =>
+            const AddArticlePage(), // Halaman tambah artikel
+        '/editartikel': (context) =>
+            const EditArticlePage(), // Halaman tambah artikel
       },
     );
   }
